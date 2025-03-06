@@ -33,9 +33,7 @@ O primeiro trabalho prático da nossa disciplina é a implementação de um rela
 
 ### CÓDIGO QUE JÁ ESTÁ PRONTO
 
-- Nesse projeto, você deve necessariamente usar o CRUD genérico
-
-- Links to an external site. que desenvolvemos em sala como base. Nosso CRUD cria registros com a seguinte estrutura:
+- Nesse projeto, você deve necessariamente usar o [CRUD genérico](https://github.com/kutova/AEDsIII/tree/main/CRUD2) que desenvolvemos em sala como base. Nosso CRUD cria registros com a seguinte estrutura:
 
   - Lápide - Byte que indica se o registro é válido ou se é um registro excluído;
   - Indicador de tamanho do registro - Número inteiro (short) que indica o tamanho do vetor de bytes;
