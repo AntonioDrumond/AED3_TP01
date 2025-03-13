@@ -42,12 +42,45 @@ public class Serie implements Registro
 		this.ID = ID;
 	}
 
+    public void setNome(String nome){
+        this.nome = nome;
+    }
+
+    public void setLancamento(LocalDate lancamento){
+        this.lancamento = lancamento;
+    }
+
+    public void setSinopse(String sinopse){
+        this.sinopse = sinopse;
+    }
+
+    public void setStreaming(String streaming){
+        this.streaming = streaming;
+    }
+
 	// Metodos Get
 
 	public int getID ()
 	{
 		return (this.ID);
 	}
+
+    public String getNome(){
+        return this.nome;
+    }
+
+    public LocalDate lancamento(){
+        return this.lancamento;
+    }
+
+    public String sinopse(){
+        return this.sinopse;
+    }
+
+    public String streaming(){
+        return this.streaming;
+    }
+
 
 	// Metodos ByteArray
 

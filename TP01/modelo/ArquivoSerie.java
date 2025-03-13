@@ -7,37 +7,37 @@ import registro.*;
 public class ArquivoSerie extends registro.Arquivo<Serie> {
 
     Arquivo<Serie> arqSeries;
-    HashExtensivel<ParIDEndereco> indiceDireto;
+    HashExtensivel<ParNomeId> indiceNome;
 
     public ArquivoSerie() throws Exception {
         super("serie", Serie.class.getConstructor());
-        indiceDireto = new HashExtensivel<>(
-            ParIDEndereco.class.getConstructor(), 
+        indiceNome = new HashExtensivel<>(
+            ParNomeId.class.getConstructor(), 
             4, 
-            ".\\dados\\series\\indiceCPF.d.db",   // diretório - metadado
-            ".\\dados\\series\\indiceCPF.c.db"    // cestos  - dado
+            ".\\dados\\series\\indiceNome.d.db",   // diretório - metadado
+            ".\\dados\\series\\indiceNome.c.db"    // cestos  - dado
         );
     }
 
      @Override
     public int create(Serie s) throws Exception {
         int id = super.create(s);
-        // indiceDireto.create(new ParIDEndereco(s.(), id)); // Parece desnecessario
+        indiceNome.create(new ParNomeId(s.(), id)); // Parece desnecessario
         return id;
     }
 
     public Serie read(String cpf) throws Exception {
-        ParIDEndereco pie = indiceDireto.read(ParIDEndereco.hash(cpf));
-        if(pie == null)
+        ParNomeId pni = indiceNome.read(ParNomeId.hash(cpf));
+        if(pni == null)
             return null;
-        return read(pie.getId());
+        return read(pni.getId());
     }
     
     public boolean delete(String cpf) throws Exception {
-        ParIDEndereco pie = indiceDireto.read(ParIDEndereco.hash(cpf));
-        if(pie != null) 
-            if(delete(pie.getId())) 
-                return indiceDireto.delete(ParIDEndereco.hash(cpf));
+        ParNomeId pni = indiceNome.read(ParNomeId.hash(cpf));
+        if(pni != null) 
+            if(delete(pni.getId())) 
+                return indiceNome.delete(ParNomeId.hash(cpf));
         return false;
     }
 
@@ -46,7 +46,7 @@ public class ArquivoSerie extends registro.Arquivo<Serie> {
         Serie c = super.read(id);
         if(c != null) {
             if(super.delete(id))
-                return indiceDireto.delete(ParIDEndereco.hash(c.getCpf()));
+                return indiceNome.delete(ParNomeId.hash(c.getCpf()));
         }
         return false;
     }
@@ -56,8 +56,8 @@ public class ArquivoSerie extends registro.Arquivo<Serie> {
         Serie serieVelho = read(novoSerie.getCpf());
         if(super.update(novoSerie)) {
             if(novoSerie.getCpf().compareTo(serieVelho.getCpf())!=0) {
-                indiceDireto.delete(ParIDEndereco.hash(serieVelho.getCpf()));
-                indiceDireto.create(new ParIDEndereco(novoSerie.getCpf(), novoSerie.getId()));
+                indiceNome.delete(ParNomeId.hash(serieVelho.getCpf()));
+                indiceNome.create(new ParNomeId(novoSerie.getCpf(), novoSerie.getId()));
             }
             return true;
         }
