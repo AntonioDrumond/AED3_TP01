@@ -88,11 +88,11 @@ public class Serie implements Registro
 
 	public String toString ()
 	{
-		String res = ("ID: " + this.ID 
-					+ "Nome: " + this.nome
-					+ "Lancamento: " + this.lancamento
-					+ "Sinopse: " + this.sinopse
-					+ "Streaming: " + this.streaming);
+		String res = ("\nID: " + this.ID 
+					+ "\nNome: " + this.nome
+					+ "\nLancamento: " + this.lancamento
+					+ "\nSinopse: " + this.sinopse
+					+ "\nStreaming: " + this.streaming);
 		return (res);
 	}
 }

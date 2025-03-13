@@ -256,6 +256,45 @@ public class Arquivo <T extends Registro>
 		return (endereco);
 	}
 
+    public void addDeleted(int tamanhoEspaco, long enderecoEspaco) throws Exception {
+        long anterior = 4; // início da lista
+        arquivo.seek(anterior);
+        long endereco = arquivo.readLong(); // endereço do elemento que será testado
+        long proximo = -1; // endereço do elemento seguinte da lista
+        int tamanho;
+        if(endereco==-1) {  // lista vazia
+            arquivo.seek(4);
+            arquivo.writeLong(enderecoEspaco);
+            arquivo.seek(enderecoEspaco+3);
+            arquivo.writeLong(-1);
+        } else {
+            do {
+                arquivo.seek(endereco+1);
+                tamanho = arquivo.readShort();
+                proximo = arquivo.readLong();
+                if(tamanho > tamanhoEspaco) {  // encontrou a posição de inserção (antes do elemento atual)
+                    if(anterior == 4) // será o primeiro elemento da lista
+                        arquivo.seek(anterior);
+                    else
+                        arquivo.seek(anterior+3);
+                    arquivo.writeLong(enderecoEspaco);
+                    arquivo.seek(enderecoEspaco+3);
+                    arquivo.writeLong(endereco);
+                    break;
+                }
+                if(proximo == -1) {  // fim da lista
+                    arquivo.seek(endereco+3);
+                    arquivo.writeLong(enderecoEspaco);
+                    arquivo.seek(enderecoEspaco+3);
+                    arquivo.writeLong(+1);
+                    break;
+                }
+                anterior = endereco;
+                endereco = proximo;
+            } while (endereco!=-1);
+        }
+    }
+
 	public void close() throws Exception
 	{
 		arquivo.close();
