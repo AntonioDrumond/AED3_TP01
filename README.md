@@ -1,6 +1,12 @@
 # Trabalho Pratico 01
 
-O primeiro trabalho prático da nossa disciplina é a implementação de um relacionamento 1:N entre duas entidades. Para isso, você precisará partir do CRUD genérico que trabalhamos na disciplina.
+O primeiro trabalho prático realizado na disciplina Algoritmos e Estruturas de Dados III
+
+## Integrantes
++ Antônio Drumond Cota de Sousa
++ Davi Ferreira Puddo
++ Raquel de Parde Motta
++ Laura Menezes Heráclito Alves
 
 ## Enunciado
 
