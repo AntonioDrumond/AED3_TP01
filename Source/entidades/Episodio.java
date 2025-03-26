@@ -1,10 +1,13 @@
 package entidades;
+import registro.Registro;
 
 import java.time.LocalDate;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.DataInputStream;
+
+//falta metodos set e get
 
 public class Episodio implements Registro 
 {
@@ -51,6 +54,16 @@ public class Episodio implements Registro
 	public int getID ()
 	{
 		return (this.ID);
+	}
+
+	public String getNome ()
+	{
+		return (this.nome);
+	}
+
+	public int getIDSerie (){
+		
+		return (this.IDSerie);
 	}
 	
 	// Metodos ByteArray

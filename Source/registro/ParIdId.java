@@ -1,16 +1,7 @@
 package registro; 
 
-/*
-Esta classe representa um objeto para uma entidade
-que será armazenado em uma árvore B+
-
-Neste caso em particular, este objeto é representado
-por dois números inteiros para que possa conter
-relacionamentos entre dois IDs de entidades quaisquer
- 
-Implementado pelo Prof. Marcos Kutova
-v1.0 - 2021
-*/
+//objeto para entidade que será armazenada em arvore b+
+//servirá para ASSOCIAR uma serie a seus episodios (relacionamento 1 para N)
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

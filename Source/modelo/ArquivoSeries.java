@@ -100,3 +100,6 @@ public class ArquivoSeries extends Arquivo<Serie> {
   }
 
 }
+
+
+//quando criarmos o ArquivoEpisodio, vamos ter ParNomeID e ParIDID
