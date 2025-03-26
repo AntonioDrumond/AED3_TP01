@@ -1,4 +1,4 @@
-package entidades;
+package visao;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
