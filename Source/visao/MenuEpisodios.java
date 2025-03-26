@@ -4,13 +4,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class MenuSeries {
+public class MenuEpisodios {
     
-    ArquivoSerie arqSeries;
+    ArquivoEpisodio arqEpisodios;
     private static Scanner console = new Scanner(System.in);
 
-    public MenuSeries() throws Exception {
-        arqSeries = new ArquivoSerie();
+    public MenuEpisodios() throws Exception {
+        arqEpisodios = new ArquivoEpisodio();
     }
 
     public void menu() {
@@ -20,7 +20,7 @@ public class MenuSeries {
 
             System.out.println("\n\nAEDsIII");
             System.out.println("-------");
-            System.out.println("> Início > Series");
+            System.out.println("> Início > Episódios");
             System.out.println("\n1 - Buscar");
             System.out.println("2 - Incluir");
             System.out.println("3 - Alterar");
@@ -36,16 +36,16 @@ public class MenuSeries {
 
             switch (opcao) {
                 case 1:
-                    buscarSerie();
+                    buscarEpisodio();
                     break;
                 case 2:
-                    incluirSerie();
+                    incluirEpisodio();
                     break;
                 case 3:
-                    alterarSerie();
+                    alterarEpisodio();
                     break;
                 case 4:
-                    excluirSerie();
+                    excluirEpisodio();
                     break;
                 case 0:
                     break;
@@ -59,8 +59,8 @@ public class MenuSeries {
 
 
     /*
-    public void buscarSerie() {
-        System.out.println("\nBusca de serie");
+    public void buscarEpisodio() {
+        System.out.println("\nBusca de episodio");
         String cpf;
         boolean cpfValido = false;
 
@@ -80,14 +80,14 @@ public class MenuSeries {
         } while (!cpfValido);
 
         try {
-            Serie serie = arqSeries.read(cpf);  // Chama o método de leitura da classe Arquivo
-            if (serie != null) {
-                mostraSerie(serie);  // Exibe os detalhes do serie encontrado
+            Episodio episodio = arqEpisodios.read(cpf);  // Chama o método de leitura da classe Arquivo
+            if (episodio != null) {
+                mostraEpisodio(episodio);  // Exibe os detalhes do episodio encontrado
             } else {
-                System.out.println("Serie não encontrado.");
+                System.out.println("Episodio não encontrado.");
             }
         } catch(Exception e) {
-            System.out.println("Erro do sistema. Não foi possível buscar o serie!");
+            System.out.println("Erro do sistema. Não foi possível buscar o episodio!");
             e.printStackTrace();
         }
     }   
@@ -95,8 +95,8 @@ public class MenuSeries {
 
 
     /*
-    public void incluirSerie() {
-        System.out.println("\nInclusão de serie");
+    public void incluirEpisodio() {
+        System.out.println("\nInclusão de episodio");
         String nome = "";
         String cpf = "";
         float salario = 0;
@@ -110,7 +110,7 @@ public class MenuSeries {
             if(nome.length()==0)
                 return;
             if(nome.length()<4)
-                System.err.println("O nome do serie deve ter no mínimo 4 caracteres.");
+                System.err.println("O nome do episodio deve ter no mínimo 4 caracteres.");
         } while(nome.length()<4);
 
         do {
@@ -144,23 +144,23 @@ public class MenuSeries {
             }
         } while(!dadosCorretos);
 
-        System.out.print("\nConfirma a inclusão da serie? (S/N) ");
+        System.out.print("\nConfirma a inclusão da episodio? (S/N) ");
         char resp = console.nextLine().charAt(0);
         if(resp=='S' || resp=='s') {
             try {
-                Serie c = new Serie(nome, cpf, salario, dataNascimento);
-                arqSeries.create(c);
-                System.out.println("Serie incluído com sucesso.");
+                Episodio c = new Episodio(nome, cpf, salario, dataNascimento);
+                arqEpisodios.create(c);
+                System.out.println("Episodio incluído com sucesso.");
             } catch(Exception e) {
-                System.out.println("Erro do sistema. Não foi possível incluir o serie!");
+                System.out.println("Erro do sistema. Não foi possível incluir o episodio!");
             }
         }
     }
     */
 
     /*
-    public void alterarSerie() {
-        System.out.println("\nAlteração de serie");
+    public void alterarEpisodio() {
+        System.out.println("\nAlteração de episodio");
         String cpf;
         boolean cpfValido = false;
 
@@ -181,24 +181,24 @@ public class MenuSeries {
 
 
         try {
-            // Tenta ler o serie com o ID fornecido
-            Serie serie = arqSeries.read(cpf);
-            if (serie != null) {
-                System.out.println("Serie encontrado:");
-                mostraSerie(serie);  // Exibe os dados do serie para confirmação
+            // Tenta ler o episodio com o ID fornecido
+            Episodio episodio = arqEpisodios.read(cpf);
+            if (episodio != null) {
+                System.out.println("Episodio encontrado:");
+                mostraEpisodio(episodio);  // Exibe os dados do episodio para confirmação
 
                 // Alteração de nome
                 System.out.print("\nNovo nome (deixe em branco para manter o anterior): ");
                 String novoNome = console.nextLine();
                 if (!novoNome.isEmpty()) {
-                    serie.nome = novoNome;  // Atualiza o nome se fornecido
+                    episodio.nome = novoNome;  // Atualiza o nome se fornecido
                 }
 
                 // Alteração de CPF
                 System.out.print("Novo CPF (deixe em branco para manter o anterior): ");
                 String novoCpf = console.nextLine();
                 if (!novoCpf.isEmpty()) {
-                    serie.cpf = novoCpf;  // Atualiza o CPF se fornecido
+                    episodio.cpf = novoCpf;  // Atualiza o CPF se fornecido
                 }
 
                 // Alteração de salário
@@ -206,7 +206,7 @@ public class MenuSeries {
                 String novoSalarioStr = console.nextLine();
                 if (!novoSalarioStr.isEmpty()) {
                     try {
-                        serie.salario = Float.parseFloat(novoSalarioStr);  // Atualiza o salário se fornecido
+                        episodio.salario = Float.parseFloat(novoSalarioStr);  // Atualiza o salário se fornecido
                     } catch (NumberFormatException e) {
                         System.err.println("Salário inválido. Valor mantido.");
                     }
@@ -218,7 +218,7 @@ public class MenuSeries {
                 if (!novaDataStr.isEmpty()) {
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        serie.nascimento = LocalDate.parse(novaDataStr, formatter);  // Atualiza a data de nascimento se fornecida
+                        episodio.nascimento = LocalDate.parse(novaDataStr, formatter);  // Atualiza a data de nascimento se fornecida
                     } catch (Exception e) {
                         System.err.println("Data inválida. Valor mantido.");
                     }
@@ -229,20 +229,20 @@ public class MenuSeries {
                 char resp = console.next().charAt(0);
                 if (resp == 'S' || resp == 's') {
                     // Salva as alterações no arquivo
-                    boolean alterado = arqSeries.update(serie);
+                    boolean alterado = arqEpisodios.update(episodio);
                     if (alterado) {
-                        System.out.println("Serie alterado com sucesso.");
+                        System.out.println("Episodio alterado com sucesso.");
                     } else {
-                        System.out.println("Erro ao alterar o serie.");
+                        System.out.println("Erro ao alterar o episodio.");
                     }
                 } else {
                     System.out.println("Alterações canceladas.");
                 }
             } else {
-                System.out.println("Serie não encontrado.");
+                System.out.println("Episodio não encontrado.");
             }
         } catch (Exception e) {
-            System.out.println("Erro do sistema. Não foi possível alterar o serie!");
+            System.out.println("Erro do sistema. Não foi possível alterar o episodio!");
             e.printStackTrace();
         }
         
@@ -251,8 +251,8 @@ public class MenuSeries {
 
 
     /*
-    public void excluirSerie() {
-        System.out.println("\nExclusão de serie");
+    public void excluirEpisodio() {
+        System.out.println("\nExclusão de episodio");
         String cpf;
         boolean cpfValido = false;
 
@@ -272,45 +272,44 @@ public class MenuSeries {
         } while (!cpfValido);
 
         try {
-            // Tenta ler o serie com o ID fornecido
-            Serie serie = arqSeries.read(cpf);
-            if (serie != null) {
-                System.out.println("Serie encontrado:");
-                mostraSerie(serie);  // Exibe os dados do serie para confirmação
+            // Tenta ler o episodio com o ID fornecido
+            Episodio episodio = arqEpisodios.read(cpf);
+            if (episodio != null) {
+                System.out.println("Episodio encontrado:");
+                mostraEpisodio(episodio);  // Exibe os dados do episodio para confirmação
 
-                System.out.print("\nConfirma a exclusão do serie? (S/N) ");
+                System.out.print("\nConfirma a exclusão do episodio? (S/N) ");
                 char resp = console.next().charAt(0);  // Lê a resposta do usuário
 
                 if (resp == 'S' || resp == 's') {
-                    boolean excluido = arqSeries.delete(cpf);  // Chama o método de exclusão no arquivo
+                    boolean excluido = arqEpisodios.delete(cpf);  // Chama o método de exclusão no arquivo
                     if (excluido) {
-                        System.out.println("Serie excluído com sucesso.");
+                        System.out.println("Episodio excluído com sucesso.");
                     } else {
-                        System.out.println("Erro ao excluir o serie.");
+                        System.out.println("Erro ao excluir o episodio.");
                     }
                 } else {
                     System.out.println("Exclusão cancelada.");
                 }
             } else {
-                System.out.println("Serie não encontrado.");
+                System.out.println("Episodio não encontrado.");
             }
         } catch (Exception e) {
-            System.out.println("Erro do sistema. Não foi possível excluir o serie!");
+            System.out.println("Erro do sistema. Não foi possível excluir o episodio!");
             e.printStackTrace();
         }
     }
     */
 
 
-    public void mostraSerie(Serie serie) {
-        if (serie != null) {
-            System.out.println("\nDetalhes da Serie:");
+    public void mostraEpisodio(Episodio episodio) {
+        if (episodio != null) {
+            System.out.println("\nDetalhes da Episodio:");
             System.out.println("----------------------");
-            System.out.printf("Nome.........: %s\n", serie.nome);
-            System.out.printf("ID...........: %d\n", serie.ID);
-            System.out.printf("Streaming....: %s\n", serie.streming);
-            System.out.printf("Sinopse......: %s\n", serie.sinopse);
-            System.out.printf("Nascimento: %s\n", serie.lancamento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            System.out.printf("Nome.........: %s\n", episodio.nome);
+            System.out.printf("Temporada....: %d\n", episodio.temporada);
+            System.out.printf("lancamento...: %s\n", episodio.lancameto.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            System.out.printf("Duracao......: %d\n", episodio.duracao);
             System.out.println("----------------------");
         }
     }
