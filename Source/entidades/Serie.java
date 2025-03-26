@@ -6,6 +6,8 @@ import java.io.DataInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 
+import registro.Registro;
+
 public class Serie implements Registro 
 {
 	// Atributos

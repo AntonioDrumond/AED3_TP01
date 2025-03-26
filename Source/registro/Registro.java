@@ -1,4 +1,4 @@
-package entidades;
+package registro;
 public interface Registro 
 {
 	public void setID (int ID);

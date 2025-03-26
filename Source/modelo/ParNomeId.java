@@ -1,5 +1,7 @@
 package modelo;
 
+//PRECISAMOS CRIAR O ArquivoSerie.java
+
 /*
 Esta classe representa um objeto para uma entidade
 que será armazenado em uma árvore B+
@@ -12,7 +14,8 @@ Implementado pelo Prof. Marcos Kutova
 v1.0 - 2024
 */
 
-import aeds3.*;
+import registro.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -22,37 +25,37 @@ import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 
-public class ParTituloId implements RegistroArvoreBMais<ParTituloId> {
+public class ParNomeId implements RegistroArvoreBMais<ParNomeId> {
 
-  private String titulo;
+  private String nome;
   private int id;
   private short TAMANHO = 34;
-  private short TAMANHO_TITULO = 30;
+  private short TAMANHO_NOME = 30;
 
-  public ParTituloId() throws Exception {
+  public ParNomeId() throws Exception {
     this("", -1);
   }
 
-  public ParTituloId(String n) throws Exception {
+  public ParNomeId(String n) throws Exception {
     this(n, -1);
   }
 
-  public ParTituloId(String t, int i) throws Exception {
+  public ParNomeId(String t, int i) throws Exception {
 
     if(!t.isEmpty()) {
 
       // Converte o título para um vetor de bytes
       byte[] vb = t.getBytes(StandardCharsets.UTF_8);
 
-      // Garante que o vetor de bytes tenha no máximo TAMANHO_TITULO bytes
-      if(vb.length > TAMANHO_TITULO) {
+      // Garante que o vetor de bytes tenha no máximo TAMANHO_NOME bytes
+      if(vb.length > TAMANHO_NOME) {
 
         // Cria um vetor do tamanho máximo
-        byte[] vb2 = new byte[TAMANHO_TITULO];
+        byte[] vb2 = new byte[TAMANHO_NOME];
         System.arraycopy(vb, 0, vb2, 0, vb2.length);
 
         // Verifica se os últimos bytes estão fora do intervalo de 0 a 127 (o que indicaria que o último caractere é um caractere acentuado)
-        int n = TAMANHO_TITULO-1;
+        int n = TAMANHO_NOME-1;
         while(n>0 && (vb2[n]<0 || vb2[n]>127))
           n--;
 
@@ -61,16 +64,16 @@ public class ParTituloId implements RegistroArvoreBMais<ParTituloId> {
         System.arraycopy(vb2, 0, vb3, 0, vb3.length);
         vb2 = vb3;
 
-        // Cria uma nova string para o título a partir desse vetor de no máximo TAMANHO_TITULO bytes
+        // Cria uma nova string para o título a partir desse vetor de no máximo TAMANHO_NOME bytes
         t = new String(vb2);
       }
     }
-    this.titulo = t; // ID do Usuário
+    this.nome = t; // ID do Usuário
     this.id = i; // ID da Pergunta
   }
   
-  public String getTitulo() {
-      return titulo;
+  public String getNome() {
+      return nome;
   }
 
   public int getId() {
@@ -78,9 +81,9 @@ public class ParTituloId implements RegistroArvoreBMais<ParTituloId> {
   }
 
   @Override
-  public ParTituloId clone() {
+  public ParNomeId clone() {
     try {
-      return new ParTituloId(this.titulo, this.id);
+      return new ParNomeId(this.nome, this.id);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -91,9 +94,9 @@ public class ParTituloId implements RegistroArvoreBMais<ParTituloId> {
     return this.TAMANHO;
   }
 
-  public int compareTo(ParTituloId a) {
-    String str1 = transforma(this.titulo);
-    String str2 = transforma(a.titulo);
+  public int compareTo(ParNomeId a) {
+    String str1 = transforma(this.nome);
+    String str2 = transforma(a.nome);
 
     // reduz o tamanho da segunda string, se necessário (para facilitar as buscas)
     if(str2.length() > str1.length())
@@ -108,20 +111,20 @@ public class ParTituloId implements RegistroArvoreBMais<ParTituloId> {
   }
 
   public String toString() {
-    return this.titulo + ";" + String.format("%-3d", this.id);
+    return this.nome + ";" + String.format("%-3d", this.id);
   }
 
   public byte[] toByteArray() throws IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     DataOutputStream dos = new DataOutputStream(baos);
-    byte[] vb = new byte[TAMANHO_TITULO];
-    byte[] vbTitulo = this.titulo.getBytes();
+    byte[] vb = new byte[TAMANHO_NOME];
+    byte[] vbNome = this.nome.getBytes();
     int i=0;
-    while(i<vbTitulo.length) {
-      vb[i] = vbTitulo[i];
+    while(i<vbNome.length) {
+      vb[i] = vbNome[i];
       i++;
     }
-    while(i<TAMANHO_TITULO) {
+    while(i<TAMANHO_NOME) {
       vb[i] = ' ';
       i++;
     }
@@ -133,9 +136,9 @@ public class ParTituloId implements RegistroArvoreBMais<ParTituloId> {
   public void fromByteArray(byte[] ba) throws IOException {
     ByteArrayInputStream bais = new ByteArrayInputStream(ba);
     DataInputStream dis = new DataInputStream(bais);
-    byte[] vb = new byte[TAMANHO_TITULO];
+    byte[] vb = new byte[TAMANHO_NOME];
     dis.read(vb);
-    this.titulo = (new String(vb)).trim();
+    this.nome = (new String(vb)).trim();
     this.id = dis.readInt();
   }
 

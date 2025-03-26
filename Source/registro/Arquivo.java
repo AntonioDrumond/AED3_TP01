@@ -8,11 +8,11 @@ public class Arquivo <T extends Registro>
 {
 	final int TAM_CABECALHO = 12;
 	RandomAccessFile arquivo;
-	String nomeArquivo;
+	public String nomeEntidade;
 	Constructor<T> construtor;
 	HashExtensivel<ParIDEndereco> indiceDireto;
 
-	public Arquivo (String na, Constructor<T> c) throws Exception
+	public Arquivo (String ne, Constructor<T> c) throws Exception
 	{
 		File d = new File(".\\dados");
 		if (!d.exists())
@@ -20,22 +20,22 @@ public class Arquivo <T extends Registro>
 			d.mkdir();
 		}
 
-		d = new File(".\\dados\\" + na);
+		d = new File(".\\dados\\" + ne);
 		if (!d.exists())
 		{
 			d.mkdir();
 		}
 
-		this.nomeArquivo = ".\\dados\\"+na+"\\"+na+".db";
+		this.nomeEntidade = ".\\dados\\"+ne+"\\"+ne+".db";
 		this.construtor = c;
-		arquivo = new RandomAccessFile(this.nomeArquivo, "rw");
+		arquivo = new RandomAccessFile(this.nomeEntidade, "rw");
 		if (arquivo.length() < TAM_CABECALHO)
 		{
 			arquivo.writeInt(0);
-			arquivo.writeLing(-1);
+			arquivo.writeLong(-1);
 		}
 
-		indiceDireto = new HashExtensivel<> (ParIDEndereco.class.getConstructor(), 4, ".\\dados\\"+na+"\\"+na+".d.db", ".\\dados\\"+na+"\\"+na+".c.db");
+		indiceDireto = new HashExtensivel<> (ParIDEndereco.class.getConstructor(), 4, ".\\dados\\"+ne+"\\"+ne+".d.db", ".\\dados\\"+ne+"\\"+ne+".c.db");
 	}
 
 
@@ -43,7 +43,7 @@ public class Arquivo <T extends Registro>
 	{
 		byte[] BA = obj.toByteArray();
 
-		long endereco = getDeleted(BA.length());
+		long endereco = getDeleted(BA.length);
 
 		if (endereco == -1) // Sem espaco disponivel
 		{
@@ -53,7 +53,7 @@ public class Arquivo <T extends Registro>
 
 			// Gravar dados
 			arquivo.writeByte(' '); 			// Lapide
-			arquivo.writeShort(BA.length()); 	// Tamanho
+			arquivo.writeShort(BA.length); 	// Tamanho
 		}
 		else	// Espaco disponivel
 		{
@@ -67,7 +67,7 @@ public class Arquivo <T extends Registro>
 		// Gravar objeto
 		arquivo.write(BA);
 
-		indiceDireto.create (new ParIDEndereco (proximoID, endereco) );
+		indiceDireto.create (new ParIDEndereco (obj.getID(), endereco) );
 	}
 
 	public int create (T obj) throws Exception
@@ -129,11 +129,11 @@ public class Arquivo <T extends Registro>
 		byte[] BA;
 		byte lapide;
 
-		ParIDEndereco PID = indiceDireto.read(ID);
+		ParIDEndereco PIE = indiceDireto.read(ID);
 		
-		if (PID != null)
+		if (PIE != null)
 		{
-			arquivo.seek(PID.getEndereco());
+			arquivo.seek(PIE.getEndereco());
 			obj = construtor.newInstance();
 			lapide = arquivo.readByte();
 			
@@ -189,7 +189,7 @@ public class Arquivo <T extends Registro>
 				if (obj.getID() == novoObj.getID())
 				{
 					byte[] BA2 = novoObj.toByteArray();
-					short tam2 = (short)BA2.length();
+					short tam2 = (short)BA2.length;
 
 					if (tam2 <= tam)	// Sobrescreve o registro antigo
 					{
@@ -203,7 +203,7 @@ public class Arquivo <T extends Registro>
 						arquivo.write('*');
 						addDeleted(tam, PIE.getEndereco());
 						
-						writeObj(BA2);
+						writeObj(novoObj);
 
 						res = true;
 					}
