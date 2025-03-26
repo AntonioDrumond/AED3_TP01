@@ -1,4 +1,4 @@
-package entidades;
+package visao;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -58,32 +58,15 @@ public class MenuEpisodios {
     }
 
 
-    /*
     public void buscarEpisodio() {
         System.out.println("\nBusca de episodio");
-        String cpf;
-        boolean cpfValido = false;
-
-        do {
-            System.out.print("\nCPF (11 dígitos): ");
-            cpf = console.nextLine();  // Lê o CPF digitado pelo usuário
-
-            if(cpf.isEmpty())
-                return; 
-
-            // Validação do CPF (11 dígitos e composto apenas por números)
-            if (cpf.length() == 11 && cpf.matches("\\d{11}")) {
-                cpfValido = true;  // CPF válido
-            } else {
-                System.out.println("CPF inválido. O CPF deve conter exatamente 11 dígitos numéricos, sem pontos e traços.");
-            }
-        } while (!cpfValido);
-
+        String nome;
         try {
-            Episodio episodio = arqEpisodios.read(cpf);  // Chama o método de leitura da classe Arquivo
+            Episodio episodio = arqEpisodios.read(nome);  // Chama o método de leitura da classe Arquivo
             if (episodio != null) {
                 mostraEpisodio(episodio);  // Exibe os detalhes do episodio encontrado
-            } else {
+            } 
+            else {
                 System.out.println("Episodio não encontrado.");
             }
         } catch(Exception e) {
@@ -91,64 +74,68 @@ public class MenuEpisodios {
             e.printStackTrace();
         }
     }   
-    */
 
 
-    /*
     public void incluirEpisodio() {
         System.out.println("\nInclusão de episodio");
         String nome = "";
-        String cpf = "";
-        float salario = 0;
-        LocalDate dataNascimento = null;
+        int IDSerie = 0;
+        int temporada = 0;
+        LocalDate lancamento = null;
+        int duracao = 0;
         boolean dadosCorretos = false;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Serie[] sa = null;
+
+        do{
+            System.out.println("\nQual o nome da serie a qual esse episodio pertence? ");
+            String nomeSerie = console.nextLine();
+            sa = arqEpisodios.readNome(nomeSerie);
+            if(sa == null)
+                System.out.println("ERRO: Serie nao cadastrada. Tente novamente: ");
+            else IDSerie = sa[0].getID();
+        } while(sa==null);
 
         do {
-            System.out.print("\nNome (min. de 4 letras ou vazio para cancelar): ");
+            System.out.print("\nNome do episodio (min. de 1 letras ou vazio para cancelar): ");
             nome = console.nextLine();
             if(nome.length()==0)
                 return;
-            if(nome.length()<4)
-                System.err.println("O nome do episodio deve ter no mínimo 4 caracteres.");
-        } while(nome.length()<4);
+            if(nome.length()<1)
+                System.err.println("O nome do episodio deve ter no mínimo 1 caracteres.");
+        } while(nome.length()<1);
+
+        do{
+            System.out.println("Temporada: (Numero inteiro positivo): ");
+            temporada = console.nextInt();
+            if(temporada<0)
+                System.out.println("O numero da temporada deve ser inteiro e positivo: ");
+        }while (temporada<0);
 
         do {
-            System.out.print("CPF (11 dígitos sem pontos ou traço): ");
-            cpf = console.nextLine();
-            if(cpf.length()!=11 && cpf.length()!=0)
-                System.err.println("O CPF deve ter exatamente 11 dígitos.");
-        } while(cpf.length()!=11 && cpf.length()!=0);
-
-        do {
-            dadosCorretos = false;
-            System.out.print("Salário: ");
-            if (console.hasNextFloat()) {
-                salario = console.nextFloat();
-                dadosCorretos = true;
-            } else {
-                System.err.println("Salário inválido! Por favor, insira um número válido.");
-            }
-            console.nextLine(); // Limpar o buffer 
-        } while(!dadosCorretos);
-
-        do {
-            System.out.print("Data de nascimento (DD/MM/AAAA): ");
+            System.out.print("Data de lancamento (DD/MM/AAAA): ");
             String dataStr = console.nextLine();
             dadosCorretos = false;
             try {
-                dataNascimento = LocalDate.parse(dataStr, formatter);
+                lancamento = LocalDate.parse(dataStr, formatter);
                 dadosCorretos = true;
             } catch (Exception e) {
                 System.err.println("Data inválida! Use o formato DD/MM/AAAA.");
             }
         } while(!dadosCorretos);
 
+        do{
+            System.out.println("Duracao em minutos: (Numero inteiro positivo): ");
+            temporada = console.nextInt();
+            if(temporada<=0)
+                System.out.println("A duracao deve ser um numero inteiro e positivo: ");
+        }while (temporada<=0);
+
         System.out.print("\nConfirma a inclusão da episodio? (S/N) ");
         char resp = console.nextLine().charAt(0);
         if(resp=='S' || resp=='s') {
             try {
-                Episodio c = new Episodio(nome, cpf, salario, dataNascimento);
+                Episodio c = new Episodio(IDSerie, nome, temporada, lancamento, duracao);
                 arqEpisodios.create(c);
                 System.out.println("Episodio incluído com sucesso.");
             } catch(Exception e) {
@@ -156,34 +143,18 @@ public class MenuEpisodios {
             }
         }
     }
-    */
 
-    /*
     public void alterarEpisodio() {
         System.out.println("\nAlteração de episodio");
-        String cpf;
-        boolean cpfValido = false;
-
-        do {
-            System.out.print("\nCPF (11 dígitos): ");
-            cpf = console.nextLine();  // Lê o CPF digitado pelo usuário
-
-            if(cpf.isEmpty())
-                return; 
-
-            // Validação do CPF (11 dígitos e composto apenas por números)
-            if (cpf.length() == 11 && cpf.matches("\\d{11}")) {
-                cpfValido = true;  // CPF válido
-            } else {
-                System.out.println("CPF inválido. O CPF deve conter exatamente 11 dígitos numéricos, sem pontos e traços.");
-            }
-        } while (!cpfValido);
-
+        String nome;
+        Episodio[] ea = null;
+        Episodio episodio = null;
 
         try {
             // Tenta ler o episodio com o ID fornecido
-            Episodio episodio = arqEpisodios.read(cpf);
-            if (episodio != null) {
+            ea = arqEpisodios.readNome(nome);
+            if (ea!=null) {
+                episodio = ea[0];
                 System.out.println("Episodio encontrado:");
                 mostraEpisodio(episodio);  // Exibe os dados do episodio para confirmação
 
@@ -194,31 +165,35 @@ public class MenuEpisodios {
                     episodio.nome = novoNome;  // Atualiza o nome se fornecido
                 }
 
-                // Alteração de CPF
-                System.out.print("Novo CPF (deixe em branco para manter o anterior): ");
-                String novoCpf = console.nextLine();
-                if (!novoCpf.isEmpty()) {
-                    episodio.cpf = novoCpf;  // Atualiza o CPF se fornecido
-                }
-
-                // Alteração de salário
-                System.out.print("Novo salário (deixe em branco para manter o anterior): ");
-                String novoSalarioStr = console.nextLine();
-                if (!novoSalarioStr.isEmpty()) {
-                    try {
-                        episodio.salario = Float.parseFloat(novoSalarioStr);  // Atualiza o salário se fornecido
-                    } catch (NumberFormatException e) {
-                        System.err.println("Salário inválido. Valor mantido.");
+                // Alteração de temporada 
+                System.out.print("Nova temporada (deixe em branco para manter a anterior): ");
+                String novaTemporada = console.nextLine();
+                if (!novaTemporada.isEmpty()) {
+                    try{
+                         episodio.temporada = Integer.parseInt(novaTemporada);  // Atualiza o CPF se fornecido
+                    } catch(NumberFormatException e){
+                        System.err.println("Temporada invalida. Valor mantido.");
                     }
                 }
 
-                // Alteração de data de nascimento
-                System.out.print("Nova data de nascimento (DD/MM/AAAA) (deixe em branco para manter a anterior): ");
+                // Alteração de duracao 
+                System.out.print("Nova duracao (deixe em branco para manter o anterior): ");
+                String novaDuracaoStr = console.nextLine();
+                if (!novaDuracaoStr.isEmpty()) {
+                    try {
+                        episodio.duracao = Integer.parseInt(novaDuracaoStr);  // Atualiza o salário se fornecido
+                    } catch (NumberFormatException e) {
+                        System.err.println("Duracao inválida. Valor mantido.");
+                    }
+                }
+
+                // Alteração de data de lancamento 
+                System.out.print("Nova data de lancamento (DD/MM/AAAA) (deixe em branco para manter a anterior): ");
                 String novaDataStr = console.nextLine();
                 if (!novaDataStr.isEmpty()) {
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        episodio.nascimento = LocalDate.parse(novaDataStr, formatter);  // Atualiza a data de nascimento se fornecida
+                        episodio.lancamento = LocalDate.parse(novaDataStr, formatter);  // Atualiza a data de nascimento se fornecida
                     } catch (Exception e) {
                         System.err.println("Data inválida. Valor mantido.");
                     }
@@ -247,34 +222,19 @@ public class MenuEpisodios {
         }
         
     }
-    */
 
 
-    /*
     public void excluirEpisodio() {
         System.out.println("\nExclusão de episodio");
-        String cpf;
-        boolean cpfValido = false;
-
-        do {
-            System.out.print("\nCPF (11 dígitos): ");
-            cpf = console.nextLine();  // Lê o CPF digitado pelo usuário
-
-            if(cpf.isEmpty())
-                return; 
-
-            // Validação do CPF (11 dígitos e composto apenas por números)
-            if (cpf.length() == 11 && cpf.matches("\\d{11}")) {
-                cpfValido = true;  // CPF válido
-            } else {
-                System.out.println("CPF inválido. O CPF deve conter exatamente 11 dígitos numéricos, sem pontos e traços.");
-            }
-        } while (!cpfValido);
+        String nome;
+        Episodio[] ea = null;
+        Episodio episodio = null;
 
         try {
             // Tenta ler o episodio com o ID fornecido
-            Episodio episodio = arqEpisodios.read(cpf);
-            if (episodio != null) {
+            ea = arqEpisodios.readNome(nome);
+            if (ea != null) {
+                episodio = ea[0];
                 System.out.println("Episodio encontrado:");
                 mostraEpisodio(episodio);  // Exibe os dados do episodio para confirmação
 
@@ -282,7 +242,7 @@ public class MenuEpisodios {
                 char resp = console.next().charAt(0);  // Lê a resposta do usuário
 
                 if (resp == 'S' || resp == 's') {
-                    boolean excluido = arqEpisodios.delete(cpf);  // Chama o método de exclusão no arquivo
+                    boolean excluido = arqEpisodios.delete(nome);  // Chama o método de exclusão no arquivo
                     if (excluido) {
                         System.out.println("Episodio excluído com sucesso.");
                     } else {
@@ -299,7 +259,6 @@ public class MenuEpisodios {
             e.printStackTrace();
         }
     }
-    */
 
 
     public void mostraEpisodio(Episodio episodio) {
