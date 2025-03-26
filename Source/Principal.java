@@ -1,15 +1,17 @@
 import java.util.Scanner;
 
-public class Principal {
-
-    public static void main(String[] args) {
-
+public class Principal 
+{
+    public static void main(String[] args) 
+	{
         Scanner sc;
 
-        try {
+        try 
+		{
             sc = new Scanner(System.in);
             int opcao;
-            do {
+            do 
+			{
 
             System.out.println("PUCFlix 1.0\n" +
                                "-----------\n" +
@@ -20,15 +22,19 @@ public class Principal {
                                "0) Sair\n");
 
                 System.out.print("\nOpção: ");
-                try {
+                try 
+				{
                     opcao = Integer.valueOf(sc.nextLine());
-                } catch(NumberFormatException e) {
+                } 
+				catch(NumberFormatException e) 
+				{
                     opcao = -1;
                 }
 
-                switch (opcao) {
+                switch (opcao) 
+				{
                     case 1:
-                        // (new MenuClientes()).menu();
+                        new MenuSeries().menu();
                         break;
                     case 0:
                         break;
@@ -39,7 +45,9 @@ public class Principal {
 
             } while (opcao != 0);
 
-        } catch(Exception e) {
+        } 
+		catch (Exception e) 
+		{
             e.printStackTrace();
         }
     }
