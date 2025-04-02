@@ -107,7 +107,6 @@ public class MenuSeries
         System.out.println("\nInclusão de serie");
 		
 		// Ler nome
-        // Read name
         do {
             System.out.print("\nNome (min. de 3 letras ou vazio para cancelar): ");
             nome = console.nextLine();
@@ -122,16 +121,7 @@ public class MenuSeries
 
         try {
 
-            Serie[] series = arqSeries.readNome(nome); // Retrieve the array of series
-    
-            if (series == null || series.length == 0) {
-                System.out.println("Serie não encontrada.");
-                return;
-            }
-    
-            for (Serie serie : series) {
-                mostraSerie(serie); // Display the details of each series found
-            }
+            Serie[] series = arqSeries.readNome(nome); 
 
             if (series != null && series.length > 0) {
                 System.err.println("Uma serie com esse nome já existe");

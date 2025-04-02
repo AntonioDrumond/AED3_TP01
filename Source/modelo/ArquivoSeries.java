@@ -3,6 +3,8 @@ package modelo;
 import registro.*;
 
 import entidades.Serie;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class ArquivoSeries extends Arquivo<Serie> {
@@ -14,8 +16,14 @@ public class ArquivoSeries extends Arquivo<Serie> {
 
     super("series", Serie.class.getConstructor());
 
+    File directory = new File("./dados/serie");
+
+    if (!directory.exists()) {
+        directory.mkdirs();
+    }
+
     indiceNome = new ArvoreBMais<>(
-    ParNomeId.class.getConstructor(), 5, "./dados/" + nomeEntidade + "/indiceNome.db");
+    ParNomeId.class.getConstructor(), 5, "./dados/serie" + "/indiceNome.db");
 
   }
 

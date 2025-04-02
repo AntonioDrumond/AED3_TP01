@@ -3,6 +3,8 @@ package modelo;
 import registro.*;
 
 import entidades.Episodio;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class ArquivoEpisodios extends Arquivo<Episodio> {
@@ -15,11 +17,16 @@ public class ArquivoEpisodios extends Arquivo<Episodio> {
 
     super("episodios", Episodio.class.getConstructor());
 
+    File directory = new File("./dados/episodio");
+    if (!directory.exists()) {
+        directory.mkdirs(); // Create the directories if they don't exist
+    }
+
     indiceNome = new ArvoreBMais<>(
-    ParNomeId.class.getConstructor(), 5, "./dados/" + nomeEntidade + "/indiceNome.db");
+    ParNomeId.class.getConstructor(), 5, "./dados/episodio" + "/indiceNome.db");
 
     indiceRelacaoSerieEp = new ArvoreBMais<>(
-    ParIdId.class.getConstructor(), 5, "./dados/" + nomeEntidade + "/indiceRelacaoSerieEp.db");
+    ParIdId.class.getConstructor(), 5, "./dados/episodio" + "/indiceRelacaoSerieEp.db");
 
   }
 
