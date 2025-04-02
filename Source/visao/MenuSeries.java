@@ -67,21 +67,25 @@ public class MenuSeries
     public void buscarSerie () 
 	{
         System.out.println("\nBusca de serie");
-        String Nome;
+        String nome;
 
 		System.out.print("\nNome: ");
-		Nome = console.nextLine();  // Lê o Nome digitado pelo usuário
+		nome = console.nextLine();  // Lê o Nome digitado pelo usuário
 
         try 
 		{
-            Serie serie = arqSeries.readNome(nome);  // Chama o método de leitura da classe Arquivo
-            if (serie != null) 
-			{
-                mostraSerie(serie);  // Exibe os detalhes do serie encontrado
-            } 
-			else 
-			{
+            Serie[] series = arqSeries.readNome(nome);  // Chama o método de leitura da classe Arquivo
+            
+            if (series != null && series.length > 0) {
+
+                for (Serie serie : series) {
+                    mostraSerie(serie);  // Exibe os detalhes de cada serie encontrada
+                }
+
+            } else {
+
                 System.out.println("Serie não encontrada.");
+
             }
         } 
 		catch (Exception e) 
@@ -103,90 +107,108 @@ public class MenuSeries
         System.out.println("\nInclusão de serie");
 		
 		// Ler nome
-        do 
-		{
+        // Read name
+        do {
             System.out.print("\nNome (min. de 3 letras ou vazio para cancelar): ");
             nome = console.nextLine();
-            if (nome.length() == 0)
-			{
+            if (nome.length() == 0) {
                 return;
-			}
-            if (nome.length() < 4)
-			{
+            }
+            if (nome.length() < 4) {
                 System.err.println("O nome da serie deve ter no mínimo 3 caracteres.");
-			}
-
+            }
         } while (nome.length() < 4);
 
-		if (arqSerie.readNome(nome) != null) // Verificar se uma serie com esse nome já existe
-		{
-			System.err.println ("Uma serie com esse nome já existe");
-		}
-		else
-		{
-			// Ler sinopse
-			do 
-			{
-				System.out.print("Sinopse (no mínimo 10 dígitos): ");
 
-				sinopse = console.nextLine();
-				if (sinopse.length() < 11)
-				{
-					System.err.println ("A sinopse deve ter no mínimo 10 dígitos.");
-				}
+        try {
 
-			} while (sinopse.length() < 11);
+            Serie[] series = arqSeries.readNome(nome); // Retrieve the array of series
+    
+            if (series == null || series.length == 0) {
+                System.out.println("Serie não encontrada.");
+                return;
+            }
+    
+            for (Serie serie : series) {
+                mostraSerie(serie); // Display the details of each series found
+            }
 
-			// Ler streaming
-			do 
-			{
-				System.out.print("Streaming: (no mínimo 3 dígitos): ");
-				if (streaming.length() < 4)
-				{
-					System.err.println ("O streaming deve ter no mínimo 3 dígitos.");
-				}
-				streaming = console.nextLine();
+            if (series != null && series.length > 0) {
+                System.err.println("Uma serie com esse nome já existe");
+                return;
+            }
+            else
+            {
+                // Ler sinopse
+                do 
+                {
+                    System.out.print("Sinopse (no mínimo 10 dígitos): ");
+    
+                    sinopse = console.nextLine();
+                    if (sinopse.length() < 11)
+                    {
+                        System.err.println ("A sinopse deve ter no mínimo 10 dígitos.");
+                    }
+    
+                } while (sinopse.length() < 11);
+    
+                // Ler streaming
+                do 
+                {
+                    System.out.print("Streaming: (no mínimo 3 dígitos): ");
+                    if (streaming.length() < 4)
+                    {
+                        System.err.println ("O streaming deve ter no mínimo 3 dígitos.");
+                    }
+                    streaming = console.nextLine();
+    
+                } while (streaming.length() < 4);
+    
+                // Ler data de lancamento
+                boolean dadosCorretos = false;
+                do 
+                {
+                    System.out.print("Data de lancamento (DD/MM/AAAA): ");
+                    String dataStr = console.nextLine();
+    
+                    try 
+                    {
+                        dataLancamento = LocalDate.parse(dataStr, formatter);
+                        dadosCorretos = true;
+                    } 
+                    catch (Exception e) 
+                    {
+                        System.err.println ("Data inválida! Use o formato DD/MM/AAAA.");
+                    }
+    
+                } while (!dadosCorretos);
+    
+                // Confirmar inclusão
+                System.out.print("\nConfirma a inclusão da serie? (S/N) ");
+    
+                char resp = console.nextLine().charAt(0);
+    
+                if (resp == 'S' || resp == 's') 
+                {
+                    try 
+                    {
+                        Serie s = new Serie (nome, dataLancamento, sinopse, streaming);
+                        arqSeries.create (s);
+                        System.out.println ("Serie incluída com sucesso.");
+                    } 
+                    catch (Exception e) 
+                    {
+                        System.out.println("Erro do sistema. Não foi possível incluir a serie!");
+                    }
+                }
+            }
 
-			} while (streaming.length() < 4);
+        } catch (Exception e) {
+            System.out.println("Erro do sistema. Não foi possível buscar a serie!");
+            e.printStackTrace();
+        }
 
-			// Ler data de lancamento
-			boolean dadosCorretos = false;
-			do 
-			{
-				System.out.print("Data de lancamento (DD/MM/AAAA): ");
-				String dataStr = console.nextLine();
-
-				try 
-				{
-					dataLancamento = LocalDate.parse(dataStr, formatter);
-					dadosCorretos = true;
-				} 
-				catch (Exception e) 
-				{
-					System.err.println ("Data inválida! Use o formato DD/MM/AAAA.");
-				}
-
-			} while (!dadosCorretos);
-
-			// Confirmar inclusão
-			System.out.print("\nConfirma a inclusão da serie? (S/N) ");
-
-			char resp = console.nextLine().charAt(0);
-
-			if (resp == 'S' || resp == 's') 
-			{
-				try 
-				{
-					s = new Serie (nome, dataLancamento, sinopse, streaming);
-					arqSeries.create (s);
-					System.out.println ("Serie incluída com sucesso.");
-				} 
-				catch (Exception e) 
-				{
-					System.out.println("Erro do sistema. Não foi possível incluir a serie!");
-				}
-			}
-		}
+        
     }
 
     public void alterarSerie() 
@@ -220,7 +242,8 @@ public class MenuSeries
         try 
 		{
             // Tenta ler a serie com o ID fornecido
-            Serie serie = arqSeries.readNome(nome);
+            Serie[] s = arqSeries.readNome(nome);
+            Serie serie = s[0];
 
             if (serie != null) 
 			{
@@ -233,7 +256,7 @@ public class MenuSeries
 
                 if (!novoNome.isEmpty()) 
 				{
-                    serie.nome = novoNome;  // Atualiza o nome se fornecido
+                    serie.setNome(novoNome);  // Atualiza o nome se fornecido
                 }
 
                 // Alteração de CPF
@@ -335,12 +358,13 @@ public class MenuSeries
 
         try 
 		{
-            // Tenta ler a serie com o ID fornecido
-            Serie serie = arqSeries.readNome(nome);
+            // Tenta ler a serie com o nome fornecido
+            Serie[] s = arqSeries.readNome(nome);
+            Serie serie = s[0];
 			
             if (serie != null) 
 			{
-                System.out.println("Serie encontrado:");
+                System.out.println("Serie encontrada:");
                 mostraSerie(serie);  // Exibe os dados do serie para confirmação
 
                 System.out.print("\nConfirma a exclusão do serie? (S/N) ");
@@ -348,7 +372,7 @@ public class MenuSeries
 
                 if (resp == 'S' || resp == 's') 
 				{
-                    boolean excluido = arqSeries.delete(nome);  // Chama o método de exclusão no arquivo
+                    boolean excluido = arqSeries.delete(serie.getID());  // Chama o método de exclusão no arquivo
 
                     if (excluido) 
 					{
@@ -382,11 +406,11 @@ public class MenuSeries
 		{
             System.out.println ("\nDetalhes da Serie:");
             System.out.println ("----------------------");
-            System.out.printf  ("Nome.........: %s\n", serie.nome);
-            System.out.printf  ("ID...........: %d\n", serie.ID);
-            System.out.printf  ("Streaming....: %s\n", serie.streming);
-            System.out.printf  ("Sinopse......: %s\n", serie.sinopse);
-            System.out.printf  ("Nascimento: %s\n", serie.lancamento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            System.out.printf  ("Nome.........: %s\n", serie.getNome());
+            System.out.printf  ("ID...........: %d\n", serie.getID());
+            System.out.printf  ("Streaming....: %s\n", serie.getStreaming());
+            System.out.printf  ("Sinopse......: %s\n", serie.getSinopse());
+            System.out.printf  ("Nascimento: %s\n", serie.getLancamento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             System.out.println ("----------------------");
         }
     }

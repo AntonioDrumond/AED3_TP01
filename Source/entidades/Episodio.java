@@ -65,6 +65,36 @@ public class Episodio implements Registro
 		
 		return (this.IDSerie);
 	}
+
+	public void setTemporada (int temporada)
+	{
+		this.temporada = temporada;
+	}
+
+	public void setDuracao (int duracao)
+	{
+		this.duracao = duracao;
+	}
+
+	public void setLancamento (LocalDate lancamento)
+	{
+		this.lancamento = lancamento;
+	}
+
+	public int getTemporada ()
+	{
+		return (this.temporada);
+	}
+
+	public LocalDate getLancamento ()
+	{
+		return (this.lancamento);
+	}
+
+	public int getDuracao ()
+	{
+		return (this.duracao);
+	}
 	
 	// Metodos ByteArray
 

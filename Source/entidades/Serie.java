@@ -70,15 +70,15 @@ public class Serie implements Registro
         return this.nome;
     }
 
-    public LocalDate lancamento(){
+    public LocalDate getLancamento(){
         return this.lancamento;
     }
 
-    public String sinopse(){
+    public String getSinopse(){
         return this.sinopse;
     }
 
-    public String streaming(){
+    public String getStreaming(){
         return this.streaming;
     }
 

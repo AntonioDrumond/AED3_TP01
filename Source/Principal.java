@@ -1,3 +1,5 @@
+import visao.*;
+
 import java.util.Scanner;
 
 public class Principal 
@@ -15,13 +17,13 @@ public class Principal
 
             System.out.println("PUCFlix 1.0\n" +
                                "-----------\n" +
-                               "> Início\n\n" +
-                               "1) Séries\n" + 
-                               "2) Episódios\n" + 
+                               "> Inicio\n\n" +
+                               "1) Series\n" + 
+                               "2) Episodios\n" + 
                                "3) Atores\n" + 
                                "0) Sair\n");
 
-                System.out.print("\nOpção: ");
+                System.out.print("\nOpcao: ");
                 try 
 				{
                     opcao = Integer.valueOf(sc.nextLine());

@@ -1,4 +1,6 @@
 package visao;
+import modelo.*;
+import entidades.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -6,11 +8,13 @@ import java.util.Scanner;
 
 public class MenuEpisodios {
     
-    ArquivoEpisodio arqEpisodios;
+    ArquivoEpisodios arqEpisodios;
+    ArquivoSeries arqSeries;
     private static Scanner console = new Scanner(System.in);
 
     public MenuEpisodios() throws Exception {
-        arqEpisodios = new ArquivoEpisodio();
+        arqEpisodios = new ArquivoEpisodios();
+        arqSeries = new ArquivoSeries();
     }
 
     public void menu() {
@@ -57,26 +61,27 @@ public class MenuEpisodios {
         } while (opcao != 0);
     }
 
-
     public void buscarEpisodio() {
         System.out.println("\nBusca de episodio");
-        String nome;
+        System.out.print("Digite o nome do episodio: "); 
+        String nome = console.nextLine(); 
         try {
-            Episodio episodio = arqEpisodios.read(nome);  // Chama o método de leitura da classe Arquivo
-            if (episodio != null) {
-                mostraEpisodio(episodio);  // Exibe os detalhes do episodio encontrado
-            } 
-            else {
+            Episodio[] episodios = arqEpisodios.readNome(nome);
+            if (episodios != null && episodios.length > 0) {
+                for (Episodio episodio : episodios) {
+                    mostraEpisodio(episodio);
+                }
+            } else {
                 System.out.println("Episodio não encontrado.");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("Erro do sistema. Não foi possível buscar o episodio!");
             e.printStackTrace();
         }
-    }   
+    }
 
+    public void incluirEpisodio(){
 
-    public void incluirEpisodio() {
         System.out.println("\nInclusão de episodio");
         String nome = "";
         int IDSerie = 0;
@@ -90,10 +95,20 @@ public class MenuEpisodios {
         do{
             System.out.println("\nQual o nome da serie a qual esse episodio pertence? ");
             String nomeSerie = console.nextLine();
-            sa = arqEpisodios.readNome(nomeSerie);
+
+            try {
+                sa = arqSeries.readNome(nomeSerie);
+            } catch (Exception e) {
+                System.out.println("Erro do sistema. Não foi possível buscar a serie!");
+                e.printStackTrace();
+            }
+
             if(sa == null)
+
                 System.out.println("ERRO: Serie nao cadastrada. Tente novamente: ");
+
             else IDSerie = sa[0].getID();
+            
         } while(sa==null);
 
         do {
@@ -145,13 +160,16 @@ public class MenuEpisodios {
     }
 
     public void alterarEpisodio() {
+
         System.out.println("\nAlteração de episodio");
-        String nome;
+        System.out.print("Digite o nome do episodio: "); // Prompt the user for the episode name
+        String nome = console.nextLine(); // Initialize the 'nome' variable with user input
         Episodio[] ea = null;
         Episodio episodio = null;
 
         try {
-            // Tenta ler o episodio com o ID fornecido
+
+            // Tenta ler o episodio com o nome fornecido
             ea = arqEpisodios.readNome(nome);
             if (ea!=null) {
                 episodio = ea[0];
@@ -162,18 +180,21 @@ public class MenuEpisodios {
                 System.out.print("\nNovo nome (deixe em branco para manter o anterior): ");
                 String novoNome = console.nextLine();
                 if (!novoNome.isEmpty()) {
-                    episodio.nome = novoNome;  // Atualiza o nome se fornecido
+                    novoNome = episodio.getNome();  // Atualiza o nome se fornecido
                 }
 
                 // Alteração de temporada 
                 System.out.print("Nova temporada (deixe em branco para manter a anterior): ");
                 String novaTemporada = console.nextLine();
+
                 if (!novaTemporada.isEmpty()) {
-                    try{
-                         episodio.temporada = Integer.parseInt(novaTemporada);  // Atualiza o CPF se fornecido
-                    } catch(NumberFormatException e){
-                        System.err.println("Temporada invalida. Valor mantido.");
+
+                    try {
+                        episodio.setTemporada(Integer.parseInt(novaTemporada)); // Use the setter method
+                    } catch (NumberFormatException e) {
+                        System.err.println("Temporada inválida. Valor mantido.");
                     }
+
                 }
 
                 // Alteração de duracao 
@@ -181,7 +202,7 @@ public class MenuEpisodios {
                 String novaDuracaoStr = console.nextLine();
                 if (!novaDuracaoStr.isEmpty()) {
                     try {
-                        episodio.duracao = Integer.parseInt(novaDuracaoStr);  // Atualiza o salário se fornecido
+                        episodio.setDuracao(Integer.parseInt(novaDuracaoStr));  // Use the setter method
                     } catch (NumberFormatException e) {
                         System.err.println("Duracao inválida. Valor mantido.");
                     }
@@ -193,7 +214,7 @@ public class MenuEpisodios {
                 if (!novaDataStr.isEmpty()) {
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        episodio.lancamento = LocalDate.parse(novaDataStr, formatter);  // Atualiza a data de nascimento se fornecida
+                        episodio.setLancamento(LocalDate.parse(novaDataStr, formatter));  // Use the setter method
                     } catch (Exception e) {
                         System.err.println("Data inválida. Valor mantido.");
                     }
@@ -213,9 +234,11 @@ public class MenuEpisodios {
                 } else {
                     System.out.println("Alterações canceladas.");
                 }
+
             } else {
                 System.out.println("Episodio não encontrado.");
             }
+
         } catch (Exception e) {
             System.out.println("Erro do sistema. Não foi possível alterar o episodio!");
             e.printStackTrace();
@@ -226,23 +249,25 @@ public class MenuEpisodios {
 
     public void excluirEpisodio() {
         System.out.println("\nExclusão de episodio");
-        String nome;
+        System.out.print("Digite o nome do episodio: ");
+        String nome = console.nextLine();
         Episodio[] ea = null;
         Episodio episodio = null;
-
+    
         try {
-            // Tenta ler o episodio com o ID fornecido
+            //buscar episodio pelo nome
             ea = arqEpisodios.readNome(nome);
-            if (ea != null) {
+            if (ea != null && ea.length > 0) {
                 episodio = ea[0];
                 System.out.println("Episodio encontrado:");
-                mostraEpisodio(episodio);  // Exibe os dados do episodio para confirmação
-
+                mostraEpisodio(episodio); //mostrar detalhes para verificacao
+    
                 System.out.print("\nConfirma a exclusão do episodio? (S/N) ");
-                char resp = console.next().charAt(0);  // Lê a resposta do usuário
-
+                char resp = console.nextLine().charAt(0);
+    
                 if (resp == 'S' || resp == 's') {
-                    boolean excluido = arqEpisodios.delete(nome);  // Chama o método de exclusão no arquivo
+                    //deletar ep usando seu id
+                    boolean excluido = arqEpisodios.delete(episodio.getID());
                     if (excluido) {
                         System.out.println("Episodio excluído com sucesso.");
                     } else {
@@ -265,10 +290,10 @@ public class MenuEpisodios {
         if (episodio != null) {
             System.out.println("\nDetalhes da Episodio:");
             System.out.println("----------------------");
-            System.out.printf("Nome.........: %s\n", episodio.nome);
-            System.out.printf("Temporada....: %d\n", episodio.temporada);
-            System.out.printf("lancamento...: %s\n", episodio.lancameto.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            System.out.printf("Duracao......: %d\n", episodio.duracao);
+            System.out.printf("Nome.........: %s\n", episodio.getNome());
+            System.out.printf("Temporada....: %d\n", episodio.getTemporada());
+            System.out.printf("lancamento...: %s\n", episodio.getLancamento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            System.out.printf("Duracao......: %d\n", episodio.getDuracao());
             System.out.println("----------------------");
         }
     }
