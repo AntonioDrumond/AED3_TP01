@@ -9,6 +9,5 @@ Para garantir a organização e a separação de responsabilidades, o programa s
 
 
 
-[^1]: My reference.
-[^2]: To add line breaks within a footnote, prefix new lines with 2 spaces.
-  This is a second line.
+[^1]: https://www.codecademy.com/article/what-is-crud
+[^2]: https://www.devmedia.com.br/introducao-ao-padrao-mvc/29308
