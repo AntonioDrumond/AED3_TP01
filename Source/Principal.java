@@ -2,14 +2,22 @@ import visao.*;
 
 import java.util.Scanner;
 
+import entidades.Episodio;
+import entidades.Serie;
+import registro.Arquivo;
+
 public class Principal 
 {
     public static void main(String[] args) 
 	{
         Scanner sc;
+        Arquivo<Serie> arqSeries = null; //!!!
+        Arquivo<Episodio> arqEpisodios = null; //!!!
 
         try 
-		{
+		{   
+            arqSeries = new Arquivo<>("series", Serie.class.getConstructor());//!!!
+            arqEpisodios = new Arquivo<>("episodios", Episodio.class.getConstructor());
             sc = new Scanner(System.in);
             int opcao;
             do 
@@ -20,7 +28,7 @@ public class Principal
                                "> Inicio\n\n" +
                                "1) Series\n" + 
                                "2) Episodios\n" + 
-                               "3) Atores\n" + 
+                               "3) Atores (nao implementado)\n" + 
                                "0) Sair\n");
 
                 System.out.print("\nOpcao: ");
@@ -54,6 +62,22 @@ public class Principal
 		catch (Exception e) 
 		{
             e.printStackTrace();
+
+        } finally {
+
+            // Ensure resources are closed
+            try {
+                if (arqSeries != null) {
+                    arqSeries.close();
+                }
+                if (arqEpisodios != null) {
+                    arqEpisodios.close();
+                }
+            } catch (Exception e) {
+                System.err.println("Erro ao fechar os arquivos.");
+                e.printStackTrace();
+            }
+
         }
     }
 

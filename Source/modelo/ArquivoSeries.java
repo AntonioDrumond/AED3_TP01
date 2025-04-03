@@ -85,28 +85,20 @@ public class ArquivoSeries extends Arquivo<Serie> {
   }
 
   @Override
-  public boolean update (Serie novaSerie) throws Exception 
-  {
+  public boolean update(Serie novaSerie) throws Exception {
+      Serie serie = read(novaSerie.getID()); // Read the existing record
 
-    Serie s = read(novaSerie.getID());
-
-    if(s != null){
-      
-      if(super.update(novaSerie))
-      {
-
-        if(!s.getNome().equals(novaSerie.getNome()))
-        {
-          indiceNome.delete(new ParNomeId(s.getNome(), s.getID()));
-          indiceNome.create(new ParNomeId(novaSerie.getNome(), novaSerie.getID()));
-        }
-        return true;
-    
+      if (serie != null) {
+          if (super.update(novaSerie)) { // Call the superclass update method
+              if (!serie.getNome().equals(novaSerie.getNome())) {
+                  // Update the name index if the name has changed
+                  indiceNome.delete(new ParNomeId(serie.getNome(), serie.getID()));
+                  indiceNome.create(new ParNomeId(novaSerie.getNome(), novaSerie.getID()));
+              }
+              return true;
+          }
       }
-    
-    }
-    
-    return false;
+      return false;
   }
 
 }

@@ -36,7 +36,8 @@ public class MenuSeries
             System.out.println("2 - Incluir");
             System.out.println("3 - Alterar");
             System.out.println("4 - Excluir");
-            System.out.println("5 - Listar episodios da serie");
+            System.out.println("5 - Listar todos episodios da serie");
+            System.out.println("6 - Listar episodios por temporada");
             System.out.println("0 - Voltar");
 
             System.out.print("\nOpcao: ");
@@ -66,6 +67,10 @@ public class MenuSeries
                 case 5:
                     // Listar todos os episodios
                     listarEpisodiosPorSerie();
+                    break;
+                case 6:
+                    // Listar episodios por temporada
+                    listarEpisodiosPorTemporada();
                     break;
                 case 0:
                     break;
@@ -150,6 +155,64 @@ public class MenuSeries
 
         } catch (Exception e) {
             System.out.println("Erro ao listar episódios da série!");
+            e.printStackTrace();
+        }
+    }
+
+    public void listarEpisodiosPorTemporada() {
+
+        System.out.println("\nListagem de episódios por temporada");
+        String nomeSerie;
+    
+        // Ask the user for the series name
+        System.out.print("\nNome da serie: ");
+        nomeSerie = console.nextLine();
+    
+        try {
+            // Retrieve the series by name
+            Serie[] series = arqSeries.readNome(nomeSerie);
+    
+            if (series == null || series.length == 0) {
+                System.out.println("Série não encontrada.");
+                return;
+            }
+    
+            Serie serie = series[0]; // Assuming the first match is the desired series
+            System.out.println("Série encontrada:");
+            mostraSerie(serie);
+    
+            // Ask the user for the desired season
+            System.out.print("\nDigite o número da temporada desejada: ");
+            int temporadaDesejada = Integer.parseInt(console.nextLine());
+    
+            // Get all episodes of the series
+            Episodio[] episodios = arqEpisodios.readPorSerie(serie.getID());
+    
+            if (episodios == null || episodios.length == 0) {
+                System.out.println("Nenhum episódio encontrado para esta série.");
+                return;
+            }
+    
+            // Filter episodes by the desired season
+            System.out.println("\nEpisódios da temporada " + temporadaDesejada + ":");
+            boolean encontrouEpisodios = false;
+            for (Episodio episodio : episodios) {
+                if (episodio.getTemporada() == temporadaDesejada) {
+                    System.out.println("----------------------------");
+                    System.out.println("Nome: " + episodio.getNome());
+                    System.out.println("Temporada: " + episodio.getTemporada());
+                    System.out.println("Duração: " + episodio.getDuracao() + " minutos");
+                    System.out.println("Data de Lançamento: " + episodio.getLancamento());
+                    encontrouEpisodios = true;
+                }
+            }
+    
+            if (!encontrouEpisodios) {
+                System.out.println("Nenhum episódio encontrado para a temporada " + temporadaDesejada + ".");
+            }
+    
+        } catch (Exception e) {
+            System.out.println("Erro ao listar episódios da temporada!");
             e.printStackTrace();
         }
     }
@@ -307,13 +370,22 @@ public class MenuSeries
                 System.out.println ("Serie encontrada:");
                 mostraSerie(serie);  // Exibe os dados do serie para confirmação
 
-                // Alteração de nome
-                System.out.print("\nNovo nome (deixe em branco para manter o anterior): ");
-                String novoNome = console.nextLine();
+                // NOVO PASSO: Checar se há episódios vinculados a essa série
+                Episodio[] epVinculados = arqEpisodios.readPorSerie(serie.getID());
 
-                if (!novoNome.isEmpty()) 
-				{
-                    serie.setNome(novoNome);  // Atualiza o nome se fornecido
+                if (epVinculados != null && epVinculados.length > 0) {
+
+                    System.out.println("Não é possível alterar o nome da série pois existem episódios ligado a ela.");
+
+                }else{
+                    // Alteração de nome
+                    System.out.print("\nNovo nome (deixe em branco para manter o anterior): ");
+                    String novoNome = console.nextLine();
+
+                    if (!novoNome.isEmpty()) 
+				    {
+                        serie.setNome(novoNome);  // Atualiza o nome se fornecido
+                    }
                 }
 
                 // Alteração de sinopse
@@ -358,7 +430,9 @@ public class MenuSeries
                 if (resp == 'S' || resp == 's') 
 				{
                     // Salva as alterações no arquivo
+                    System.out.println("Attempting to update the series...");
                     boolean alterado = arqSeries.update(serie);
+                    System.out.println("Update completed.");
 
                     if (alterado) 
 					{
@@ -378,6 +452,7 @@ public class MenuSeries
 			{
                 System.out.println("Serie não encontrada.");
             }
+
         } 
 		catch (Exception e) 
 		{

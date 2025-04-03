@@ -61,7 +61,7 @@ public class MenuEpisodios {
         } while (opcao != 0);
     }
 
-    public void buscarEpisodio() {
+    /*public void buscarEpisodio() {
 
         System.out.println("\nBusca de episodio");
         System.out.print("Digite o nome do episodio: "); 
@@ -80,6 +80,40 @@ public class MenuEpisodios {
                 System.out.println("Episodio não encontrado.");
             }
 
+        } catch (Exception e) {
+            System.out.println("Erro do sistema. Não foi possível buscar o episodio!");
+            e.printStackTrace();
+        }
+    }*/
+
+    public void buscarEpisodio() {
+
+        System.out.println("\nBusca de episodio");
+        System.out.print("Digite o nome do episodio: "); 
+        String nome = console.nextLine(); 
+    
+        try {
+            // Retrieve all episodes with the given name
+            Episodio[] episodios = arqEpisodios.readNome(nome);
+    
+            if (episodios != null && episodios.length > 0) {
+                boolean encontrouEpisodio = false;
+    
+                for (Episodio episodio : episodios) {
+                    if (episodio != null) { // Ensure the episode is not null (not deleted)
+                        mostraEpisodio(episodio);
+                        encontrouEpisodio = true;
+                    }
+                }
+    
+                if (!encontrouEpisodio) {
+                    System.out.println("Nenhum episódio encontrado com esse nome.");
+                }
+    
+            } else {
+                System.out.println("Episodio não encontrado.");
+            }
+    
         } catch (Exception e) {
             System.out.println("Erro do sistema. Não foi possível buscar o episodio!");
             e.printStackTrace();
@@ -134,7 +168,7 @@ public class MenuEpisodios {
         } while(nome.length()<1);
 
         do{
-            System.out.println("Temporada: (Numero inteiro positivo): ");
+            System.out.print("Temporada: (Numero inteiro positivo): ");
             temporada = console.nextInt();
             console.nextLine(); 
             if(temporada<0)
@@ -154,7 +188,7 @@ public class MenuEpisodios {
         } while(!dadosCorretos);
 
         do{
-            System.out.println("Duracao em minutos: (Numero inteiro positivo): ");
+            System.out.print("Duracao em minutos: (Numero inteiro positivo): ");
             duracao = console.nextInt();
             console.nextLine();
             if(duracao<=0)
@@ -249,7 +283,7 @@ public class MenuEpisodios {
     
                 // Confirmar alterações
                 System.out.print("\nConfirma as alterações? (S/N) ");
-                char resp = console.next().charAt(0);
+                char resp = console.nextLine().charAt(0);
                 if (resp == 'S' || resp == 's') {
                     boolean alterado = arqEpisodios.update(episodio);
                     if (alterado) {

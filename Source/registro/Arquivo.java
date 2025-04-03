@@ -38,6 +38,11 @@ public class Arquivo <T extends Registro>
 		}
 
 		indiceDireto = new HashExtensivel<> (ParIDEndereco.class.getConstructor(), 4, "./dados/"+ne+"/"+ne+".d.db", "./dados/"+ne+"/"+ne+".c.db");
+		
+		////////////!!!!!!!!!!
+		if (new File("./dados/" + ne + "/" + ne + ".d.db").length() == 0) {
+			rebuildIndex();
+		}
 	}
 
 
@@ -309,5 +314,24 @@ public class Arquivo <T extends Registro>
 	{
 		arquivo.close();
 		indiceDireto.close();
+	}
+
+	///////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public void rebuildIndex() throws Exception {
+		arquivo.seek(TAM_CABECALHO); // Start after the header
+		while (arquivo.getFilePointer() < arquivo.length()) {
+			long endereco = arquivo.getFilePointer();
+			byte lapide = arquivo.readByte();
+			short tam = arquivo.readShort();
+			if (lapide == ' ') { // If the record is not deleted
+				byte[] BA = new byte[tam];
+				arquivo.read(BA);
+				T obj = construtor.newInstance();
+				obj.fromByteArray(BA);
+				indiceDireto.create(new ParIDEndereco(obj.getID(), endereco));
+			} else {
+				arquivo.skipBytes(tam); // Skip deleted record
+			}
+		}
 	}
 }
