@@ -15,6 +15,8 @@ O desenvolvimento seguiu o padrão MVC (Modelo, Visão, Controle)[^2], o que gar
 
 ## Código
 ### Classes
+#### Episodio.java
+
 
 ### Métodos
 
