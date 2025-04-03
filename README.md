@@ -13,11 +13,17 @@ Neste trabalho prático, o objetivo foi desenvolver um sistema CRUD (Criar, Ler,
 
 O desenvolvimento seguiu o padrão MVC (Modelo, Visão, Controle)[^2], o que garantiu que a lógica de controle das operações de séries e episódios fosse separada da interface com o usuário. A interface inicial foi projetada para permitir que o usuário escolhesse entre diferentes opções de gerenciamento, como séries e episódios. A visão de cada entidade foi estruturada para apresentar os dados de forma clara, facilitando a consulta e a manipulação dos registros. Além disso, foi implementada uma verificação que impede a exclusão de uma série caso haja episódios vinculados a ela, assegurando a integridade dos dados. Ao final do trabalho, o código foi publicado no GitHub, juntamente com um relatório detalhado sobre a implementação, desafios enfrentados e o cumprimento dos requisitos propostos.
 
+## Código
+### Classes
+
+## Métodos
+
+
 ## Experiência
 
 ### Problemas
 
-Por ser nossa primeira vez utilizando algorimos de Tabela Hash Extensível[^3] e Árvore B+ [^4], tivemos alguns problemas entendendo e lidando com seus métodos, além de dificuldades na manipulação dos dados dentro/por meio dessas estruturas. Além disso, instruções de update foram um desafio para implementação e funcionamento, já que ivemos dúvidas a cerca de como funcionaria para substituição de nomes de séries, além dos indíces de ID's para cada entidade.
+Por ser nossa primeira vez utilizando algorimos de Tabela Hash Extensível[^3] e Árvore B+ [^4], tivemos alguns problemas entendendo e lidando com seus métodos, além de dificuldades na manipulação dos dados dentro/por meio dessas estruturas. Além disso, instruções de update foram um desafio para implementação e funcionamento, já que tivemos dúvidas a cerca de como funcionaria para substituição de nomes de séries, além dos indíces de ID's para cada entidade.
 
 ### Resultados
 
