@@ -113,10 +113,10 @@ public class MenuSeries
             if (nome.length() == 0) {
                 return;
             }
-            if (nome.length() < 4) {
+            if (nome.length() < 3) {
                 System.err.println("O nome da serie deve ter no mínimo 3 caracteres.");
             }
-        } while (nome.length() < 4);
+        } while (nome.length() < 3);
 
 
         try {
@@ -135,12 +135,12 @@ public class MenuSeries
                     System.out.print("Sinopse (no mínimo 10 dígitos): ");
     
                     sinopse = console.nextLine();
-                    if (sinopse.length() < 11)
+                    if (sinopse.length() < 10)
                     {
                         System.err.println ("A sinopse deve ter no mínimo 10 dígitos.");
                     }
     
-                } while (sinopse.length() < 11);
+                } while (sinopse.length() < 10);
     
                 // Ler streaming
                 do 
@@ -149,13 +149,13 @@ public class MenuSeries
 
                     streaming = console.nextLine();
 
-                    if (streaming.length() < 4)
+                    if (streaming.length() < 3)
                     {
                         System.err.println ("O streaming deve ter no mínimo 3 dígitos.");
                     }
                     
     
-                } while (streaming.length() < 4);
+                } while (streaming.length() < 3);
     
                 // Ler data de lancamento
                 boolean dadosCorretos = false;

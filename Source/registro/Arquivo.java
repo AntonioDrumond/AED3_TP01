@@ -14,19 +14,19 @@ public class Arquivo <T extends Registro>
 
 	public Arquivo (String ne, Constructor<T> c) throws Exception
 	{
-		File d = new File(".\\dados");
+		File d = new File("./dados");
 		if (!d.exists())
 		{
 			d.mkdir();
 		}
 
-		d = new File(".\\dados\\" + ne);
+		d = new File("./dados/" + ne);
 		if (!d.exists())
 		{
 			d.mkdir();
 		}
 
-		this.nomeEntidade = ".\\dados\\"+ne+"\\"+ne+".db";
+		this.nomeEntidade = "./dados/"+ne+"/"+ne+".db";
 		this.construtor = c;
 
 		arquivo = new RandomAccessFile(this.nomeEntidade, "rw");
@@ -37,11 +37,11 @@ public class Arquivo <T extends Registro>
 			arquivo.writeLong(-1);
 		}
 
-		indiceDireto = new HashExtensivel<> (ParIDEndereco.class.getConstructor(), 4, ".\\dados\\"+ne+"\\"+ne+".d.db", ".\\dados\\"+ne+"\\"+ne+".c.db");
+		indiceDireto = new HashExtensivel<> (ParIDEndereco.class.getConstructor(), 4, "./dados/"+ne+"/"+ne+".d.db", "./dados/"+ne+"/"+ne+".c.db");
 	}
 
 
-	private void writeObj (T obj) throws Exception
+	private void writeObj (T obj, boolean x) throws Exception // x == false -> create | x == true -> update
 	{
 		byte[] BA = obj.toByteArray();
 
@@ -69,7 +69,14 @@ public class Arquivo <T extends Registro>
 		// Gravar objeto
 		arquivo.write(BA);
 
-		indiceDireto.create (new ParIDEndereco (obj.getID(), endereco) );
+		if (x)
+		{
+			indiceDireto.update (new ParIDEndereco (obj.getID(), endereco) );
+		}
+		else
+		{
+			indiceDireto.create (new ParIDEndereco (obj.getID(), endereco) );
+		}
 	}
 
 	public int create (T obj) throws Exception
@@ -80,7 +87,7 @@ public class Arquivo <T extends Registro>
 
 		// Gravar objeto
 		obj.setID (proximoID);
-		writeObj(obj);
+		writeObj(obj, false);
 
 		// Guardar novo ID
 		arquivo.seek(0);
@@ -206,7 +213,7 @@ public class Arquivo <T extends Registro>
 						arquivo.write('*');
 						addDeleted(tam, PIE.getEndereco());
 						
-						writeObj(novoObj);
+						writeObj(novoObj, true);
 
 						res = true;
 					}
@@ -231,7 +238,6 @@ public class Arquivo <T extends Registro>
 
 		while (endereco != -1 && stop == false)
 		{
-
 			arquivo.seek(endereco+1);		// Ir para o proximo registro
 			tamanho = arquivo.readShort();	// Ler tamanho do registro
 			proximo = arquivo.readLong();	// Ler endereco do registro
