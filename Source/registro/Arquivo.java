@@ -75,6 +75,7 @@ public class Arquivo <T extends Registro>
 	public int create (T obj) throws Exception
 	{
 		// Ler ultimo ID
+		arquivo.seek(0);
 		int proximoID = arquivo.readInt()+1; // Criar proximo
 
 		// Gravar objeto

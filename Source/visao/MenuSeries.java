@@ -23,14 +23,14 @@ public class MenuSeries
 		{
             System.out.println("\n\nAEDsIII");
             System.out.println("-------");
-            System.out.println("> Início > Series");
+            System.out.println("> Inicio > Series");
             System.out.println("\n1 - Buscar");
             System.out.println("2 - Incluir");
             System.out.println("3 - Alterar");
             System.out.println("4 - Excluir");
             System.out.println("0 - Voltar");
 
-            System.out.print("\nOpção: ");
+            System.out.print("\nOpcao: ");
             try 
 			{
                 opcao = Integer.valueOf(console.nextLine());
@@ -206,7 +206,7 @@ public class MenuSeries
 
     public void alterarSerie() 
 	{
-        System.out.println("\nAlteração de serie");
+        System.out.println("\nAlteracao de serie");
         String nome = "";
         boolean nomeValido = false;
 
@@ -236,6 +236,11 @@ public class MenuSeries
 		{
             // Tenta ler a serie com o ID fornecido
             Serie[] s = arqSeries.readNome(nome);
+
+            if (s == null || s.length == 0){
+                return;
+            }
+
             Serie serie = s[0];
 
             if (serie != null) 
@@ -252,16 +257,15 @@ public class MenuSeries
                     serie.setNome(novoNome);  // Atualiza o nome se fornecido
                 }
 
-                // Alteração de CPF
+                // Alteração de sinopse
                 System.out.print("Nova sinopse (deixe em branco para manter o anterior): ");
                 String novaSinopse = console.nextLine();
 
                 if (!novaSinopse.isEmpty()) 
 				{
-                    serie.setSinopse(novaSinopse);  // Atualiza o CPF se fornecido
+                    serie.setSinopse(novaSinopse);  
                 }
 
-                // Alteração de salário
                 System.out.print("Novo streaming (deixe em branco para manter o anterior): ");
                 String novoStreaming = console.nextLine();
 
@@ -270,7 +274,7 @@ public class MenuSeries
                     serie.setStreaming(novoStreaming);
                 }
 
-                // Alteração de data de nascimento
+                // Alteração de data de lancamento
                 System.out.print("Nova data de lancamento (DD/MM/AAAA) (deixe em branco para manter a anterior): ");
                 String novaDataLancamento = console.nextLine();
 
@@ -279,7 +283,7 @@ public class MenuSeries
                     try 
 					{
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        serie.setLancamento(LocalDate.parse(novaDataLancamento, formatter));  // Atualiza a data de nascimento se fornecida
+                        serie.setLancamento(LocalDate.parse(novaDataLancamento, formatter));
                     } 
 					catch (Exception e) 
 					{
@@ -289,7 +293,9 @@ public class MenuSeries
 
                 // Confirmação da alteração
                 System.out.print("\nConfirma as alterações? (S/N) ");
-                char resp = console.next().charAt(0);
+                
+                char resp = console.nextLine().charAt(0);
+
                 if (resp == 'S' || resp == 's') 
 				{
                     // Salva as alterações no arquivo

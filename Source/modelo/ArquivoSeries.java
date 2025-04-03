@@ -100,11 +100,15 @@ public class ArquivoSeries extends Arquivo<Serie> {
           indiceNome.create(new ParNomeId(novaSerie.getNome(), novaSerie.getID()));
 
         }
+
         return true;
+
       }
 
     }
+
     return false;
+    
   }
 
 }
