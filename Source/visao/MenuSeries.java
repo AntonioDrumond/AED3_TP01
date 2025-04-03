@@ -3,17 +3,25 @@ package visao;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+
+import entidades.Episodio;
 import entidades.Serie;
+import modelo.ArquivoEpisodios;
 import modelo.ArquivoSeries;
 
 public class MenuSeries 
 {    
     ArquivoSeries arqSeries;
+    ArquivoEpisodios arqEpisodios;
+
     private static Scanner console = new Scanner (System.in);
 
     public MenuSeries() throws Exception 
 	{
         arqSeries = new ArquivoSeries();
+
+        //para checar se tem episodios na serie antes de apaga-la
+        arqEpisodios = new ArquivoEpisodios();
     }
 
     public void menu() 
@@ -28,6 +36,7 @@ public class MenuSeries
             System.out.println("2 - Incluir");
             System.out.println("3 - Alterar");
             System.out.println("4 - Excluir");
+            System.out.println("5 - Listar episodios da serie");
             System.out.println("0 - Voltar");
 
             System.out.print("\nOpcao: ");
@@ -53,6 +62,10 @@ public class MenuSeries
                     break;
                 case 4:
                     excluirSerie();
+                    break;
+                case 5:
+                    // Listar todos os episodios
+                    listarEpisodiosPorSerie();
                     break;
                 case 0:
                     break;
@@ -93,7 +106,53 @@ public class MenuSeries
             System.out.println ("Erro do sistema. Não foi possível buscar o serie!");
             e.printStackTrace();
         }
-    }   
+    }
+
+    public void listarEpisodiosPorSerie() {
+
+        System.out.println("\nListagem de episodios");
+        String nome;
+
+		System.out.print("\nNome da serie: ");
+		nome = console.nextLine();  // Lê o Nome digitado pelo usuário
+
+        try {
+
+            Serie[] series = arqSeries.readNome(nome);
+
+            if (series == null || series.length == 0) {
+
+                System.out.println("Serie não encontrada.");
+
+            }
+
+            Serie s = series[0]; // Assuming the first match is the one we want
+            System.out.println("Serie encontrada:");
+
+            int idSerie = s.getID();  // Get the ID of the found series
+
+            // Use the readPorSerie method to get all episodes linked to the series
+            Episodio[] episodios = arqEpisodios.readPorSerie(idSerie);
+    
+            if (episodios == null || episodios.length == 0) {
+                System.out.println("Nenhum episódio encontrado para esta série.");
+                return;
+            }
+    
+            System.out.println("\nEpisódios da série:");
+            for (Episodio episodio : episodios) {
+                System.out.println("----------------------------");
+                System.out.println("Nome: " + episodio.getNome());
+                System.out.println("Temporada: " + episodio.getTemporada());
+                System.out.println("Duração: " + episodio.getDuracao() + " minutos");
+                System.out.println("Data de Lançamento: " + episodio.getLancamento());
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao listar episódios da série!");
+            e.printStackTrace();
+        }
+    }
 
     public void incluirSerie () 
 	{
@@ -327,7 +386,68 @@ public class MenuSeries
         }
     }
 
-    public void excluirSerie() 
+    public void excluirSerie() {
+        System.out.println("\nExclusão de serie");
+        String nome;
+        boolean nomeValido = false;
+
+        do {
+            System.out.print("\nNome (3 dígitos): ");
+            nome = console.nextLine();
+            if (nome.isEmpty()) {
+                return;
+            }
+            if (nome.length() > 2) {
+                nomeValido = true;
+            } else {
+                System.out.println("Nome inválido. O nome deve conter no mínimo 3 dígitos.");
+            }
+        } while (!nomeValido);
+
+        try {
+            // Tenta ler a serie com o nome fornecido
+            Serie[] s = arqSeries.readNome(nome);
+            if (s == null || s.length == 0) {
+                System.out.println("Serie não encontrada.");
+                return;
+            }
+
+            Serie serie = s[0];
+
+            // NOVO PASSO: Checar se há episódios vinculados a essa série
+            Episodio[] epVinculados = arqEpisodios.readPorSerie(serie.getID());
+
+            if (epVinculados != null && epVinculados.length > 0) {
+                System.out.println("Não é possível excluir a série pois existem episódios ligados a ela.");
+                System.out.println("Exclua primeiro todos os episódios dessa série.");
+                return;
+            }
+
+            System.out.println("Serie encontrada:");
+            mostraSerie(serie);
+
+            System.out.print("\nConfirma a exclusão do serie? (S/N) ");
+
+            char resp = console.nextLine().charAt(0);
+
+            if (resp == 'S' || resp == 's') {
+                boolean excluido = arqSeries.delete(serie.getID());
+                if (excluido) {
+                    System.out.println("Serie excluída com sucesso.");
+                } else {
+                    System.out.println("Erro ao excluir a serie.");
+                }
+            } else {
+                System.out.println("Exclusão cancelada.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro do sistema. Não foi possível excluir o serie!");
+            e.printStackTrace();
+        }
+    }
+
+    /*public void excluirSerie() 
 	{
         System.out.println("\nExclusão de serie");
         String nome;
@@ -397,7 +517,7 @@ public class MenuSeries
             System.out.println("Erro do sistema. Não foi possível excluir o serie!");
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void mostraSerie (Serie serie) 
 	{

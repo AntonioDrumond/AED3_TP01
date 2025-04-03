@@ -116,4 +116,28 @@ public class ArquivoEpisodios extends Arquivo<Episodio> {
     return false;
   }
 
+  //todos os episodios linkados a determinada serie
+  public Episodio[] readPorSerie(int idSerie) throws Exception {
+
+    // Search in the B+ tree for all pairs matching (idSerie, -1)
+    ArrayList<ParIdId> pares = indiceRelacaoSerieEp.read(new ParIdId(idSerie, -1));
+
+    if (pares.isEmpty()) {
+      return null;
+    }
+
+    Episodio[] episodios = new Episodio[pares.size()];
+    int i = 0;
+
+    // For each pair, get the episode ID and read the full record
+    for (ParIdId par : pares) {
+
+      episodios[i++] = read(par.getId2());
+      
+    }
+
+    return episodios;
+
+  }
+
 }

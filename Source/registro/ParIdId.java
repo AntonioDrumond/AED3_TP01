@@ -25,7 +25,7 @@ public class ParIdId implements registro.RegistroArvoreBMais<ParIdId> {
 
   public ParIdId(int n1, int n2) {
     try {
-      this.id1 = n1; // ID da entidade agregadora
+      this.id1 = n1; // ID da entidade agregadora SERIE
       this.id2 = n2; // ID da outra entidade
     } catch (Exception ec) {
       ec.printStackTrace();
@@ -67,6 +67,10 @@ public class ParIdId implements registro.RegistroArvoreBMais<ParIdId> {
     DataInputStream dis = new DataInputStream(bais);
     this.id1 = dis.readInt();
     this.id2 = dis.readInt();
+  }
+
+  public int getId2() {
+    return id2;
   }
 
 }

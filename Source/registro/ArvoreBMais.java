@@ -801,6 +801,8 @@ public class ArvoreBMais<T extends RegistroArvoreBMais<T>> {
         System.out.println();
     }
 
+   
+
     // Impressão recursiva
     private void print1(long pagina) throws Exception {
 
