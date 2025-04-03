@@ -3,6 +3,8 @@ package registro;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Arquivo <T extends Registro>
 {
@@ -43,6 +45,10 @@ public class Arquivo <T extends Registro>
 		if (new File("./dados/" + ne + "/" + ne + ".d.db").length() == 0) {
 			rebuildIndex();
 		}
+	}
+
+	public int getTamanhoCabecalho() {
+		return TAM_CABECALHO;
 	}
 
 
@@ -316,7 +322,7 @@ public class Arquivo <T extends Registro>
 		indiceDireto.close();
 	}
 
-	///////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public void rebuildIndex() throws Exception {
 		arquivo.seek(TAM_CABECALHO); // Start after the header
 		while (arquivo.getFilePointer() < arquivo.length()) {
@@ -333,5 +339,29 @@ public class Arquivo <T extends Registro>
 				arquivo.skipBytes(tam); // Skip deleted record
 			}
 		}
+	}
+
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public List<T> readAll() throws Exception {
+		List<T> records = new ArrayList<>();
+		arquivo.seek(TAM_CABECALHO); // Start reading after the header
+
+		while (arquivo.getFilePointer() < arquivo.length()) {
+			long pos = arquivo.getFilePointer();
+			byte lapide = arquivo.readByte(); // Read the tombstone byte
+			short tam = arquivo.readShort(); // Read the record size
+
+			if (lapide == ' ') { // If the record is not deleted
+				byte[] BA = new byte[tam];
+				arquivo.read(BA); // Read the record data
+				T obj = construtor.newInstance();
+				obj.fromByteArray(BA); // Convert the byte array to an object
+				records.add(obj); // Add the object to the list
+			} else {
+				arquivo.skipBytes(tam); // Skip the deleted record
+			}
+		}
+
+		return records;
 	}
 }

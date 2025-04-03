@@ -2,6 +2,7 @@ package visao;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 import entidades.Episodio;
@@ -38,6 +39,7 @@ public class MenuSeries
             System.out.println("4 - Excluir");
             System.out.println("5 - Listar todos episodios da serie");
             System.out.println("6 - Listar episodios por temporada");
+            System.out.println("7 - Listar todas as series cadastradas");
             System.out.println("0 - Voltar");
 
             System.out.print("\nOpcao: ");
@@ -72,6 +74,9 @@ public class MenuSeries
                     // Listar episodios por temporada
                     listarEpisodiosPorTemporada();
                     break;
+                case 7:
+                    //Listar todas as series cadastradas
+                    listarTodasSeries();
                 case 0:
                     break;
                 default:
@@ -594,6 +599,8 @@ public class MenuSeries
         }
     }*/
 
+
+
     public void mostraSerie (Serie serie) 
 	{
         if (serie != null) 
@@ -606,6 +613,27 @@ public class MenuSeries
             System.out.printf  ("Sinopse......: %s\n", serie.getSinopse());
             System.out.printf  ("Nascimento: %s\n", serie.getLancamento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             System.out.println ("----------------------");
+        }
+    }
+
+    public void listarTodasSeries() {
+        System.out.println("\nListagem de todas as séries:");
+
+        try {
+            // Use the generic readAll method to get all series
+            List<Serie> series = arqSeries.readAll();
+
+            if (series.isEmpty()) {
+                System.out.println("Nenhuma série encontrada.");
+                return;
+            }
+
+            for (Serie serie : series) {
+                mostraSerie(serie); // Display each series
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao listar todas as séries!");
+            e.printStackTrace();
         }
     }
 }
