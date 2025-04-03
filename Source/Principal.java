@@ -37,12 +37,15 @@ public class Principal
 				{
                     case 1:
                         new MenuSeries().menu();
-                        break;
+                    break;
+                    case 2:
+                        new MenuEpisodios().menu();
+                    break;
                     case 0:
-                        break;
+                    break;
                     default:
                         System.out.println("Opção inválida!");
-                        break;
+                    break;
                 }
 
             } while (opcao != 0);
