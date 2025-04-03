@@ -499,7 +499,7 @@ public class MenuSeries
 
             if (epVinculados != null && epVinculados.length > 0) {
                 System.out.println("Não é possível excluir a série pois existem episódios ligados a ela.");
-                System.out.println("Exclua primeiro todos os episódios dessa série.");
+                System.out.println("Exclua primeiro todos os episódios dessa série no menu EPISODIOS.");
                 return;
             }
 
@@ -598,8 +598,6 @@ public class MenuSeries
             e.printStackTrace();
         }
     }*/
-
-
 
     public void mostraSerie (Serie serie) 
 	{

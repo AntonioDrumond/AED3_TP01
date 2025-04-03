@@ -53,7 +53,6 @@ public class ArquivoSeries extends Arquivo<Serie> {
       for(ParNomeId par : pares){
 
         series[i++] = read(par.getId());
-        i++;
 
       }
 
