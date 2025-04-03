@@ -146,11 +146,14 @@ public class MenuSeries
                 do 
                 {
                     System.out.print("Streaming: (no mínimo 3 dígitos): ");
+
+                    streaming = console.nextLine();
+
                     if (streaming.length() < 4)
                     {
                         System.err.println ("O streaming deve ter no mínimo 3 dígitos.");
                     }
-                    streaming = console.nextLine();
+                    
     
                 } while (streaming.length() < 4);
     

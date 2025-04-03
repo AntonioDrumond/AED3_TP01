@@ -28,7 +28,9 @@ public class Arquivo <T extends Registro>
 
 		this.nomeEntidade = ".\\dados\\"+ne+"\\"+ne+".db";
 		this.construtor = c;
+
 		arquivo = new RandomAccessFile(this.nomeEntidade, "rw");
+		
 		if (arquivo.length() < TAM_CABECALHO)
 		{
 			arquivo.writeInt(0);
