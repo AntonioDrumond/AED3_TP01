@@ -87,25 +87,26 @@ public class ArquivoSeries extends Arquivo<Serie> {
   @Override
   public boolean update (Serie novaSerie) throws Exception 
   {
+
     Serie s = read(novaSerie.getID());
 
-    if(s != null)
-	{
-
+    if(s != null){
+      
       if(super.update(novaSerie))
-	  {
+      {
 
         if(!s.getNome().equals(novaSerie.getNome()))
-		{
+        {
           indiceNome.delete(new ParNomeId(s.getNome(), s.getID()));
           indiceNome.create(new ParNomeId(novaSerie.getNome(), novaSerie.getID()));
         }
         return true;
-      }
-
-    }
-    return false;
     
+      }
+    
+    }
+    
+    return false;
   }
 
 }

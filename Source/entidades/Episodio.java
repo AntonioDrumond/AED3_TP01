@@ -61,6 +61,11 @@ public class Episodio implements Registro
 		return (this.nome);
 	}
 
+	public void setNome (String nome)
+	{
+		this.nome = nome;
+	}
+
 	public int getIDSerie (){
 		
 		return (this.IDSerie);

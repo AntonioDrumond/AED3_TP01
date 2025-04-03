@@ -24,7 +24,7 @@ public class MenuEpisodios {
 
             System.out.println("\n\nAEDsIII");
             System.out.println("-------");
-            System.out.println("> Início > Episódios");
+            System.out.println("> Inicio > Episodios");
             System.out.println("\n1 - Buscar");
             System.out.println("2 - Incluir");
             System.out.println("3 - Alterar");
@@ -62,18 +62,24 @@ public class MenuEpisodios {
     }
 
     public void buscarEpisodio() {
+
         System.out.println("\nBusca de episodio");
         System.out.print("Digite o nome do episodio: "); 
         String nome = console.nextLine(); 
+
         try {
+
             Episodio[] episodios = arqEpisodios.readNome(nome);
-            if (episodios != null && episodios.length > 0) {
+
+            if (episodios != null || episodios.length > 0) {
                 for (Episodio episodio : episodios) {
                     mostraEpisodio(episodio);
                 }
+
             } else {
                 System.out.println("Episodio não encontrado.");
             }
+            
         } catch (Exception e) {
             System.out.println("Erro do sistema. Não foi possível buscar o episodio!");
             e.printStackTrace();
@@ -97,17 +103,24 @@ public class MenuEpisodios {
             String nomeSerie = console.nextLine();
 
             try {
+
                 sa = arqSeries.readNome(nomeSerie);
+
             } catch (Exception e) {
+
                 System.out.println("Erro do sistema. Não foi possível buscar a serie!");
                 e.printStackTrace();
+
             }
 
-            if(sa == null)
+            if(sa == null){
 
                 System.out.println("ERRO: Serie nao cadastrada. Tente novamente: ");
 
-            else IDSerie = sa[0].getID();
+            }else{ 
+
+                IDSerie = sa[0].getID();
+            }
             
         } while(sa==null);
 
@@ -123,6 +136,7 @@ public class MenuEpisodios {
         do{
             System.out.println("Temporada: (Numero inteiro positivo): ");
             temporada = console.nextInt();
+            console.nextLine(); 
             if(temporada<0)
                 System.out.println("O numero da temporada deve ser inteiro e positivo: ");
         }while (temporada<0);
@@ -141,10 +155,12 @@ public class MenuEpisodios {
 
         do{
             System.out.println("Duracao em minutos: (Numero inteiro positivo): ");
-            temporada = console.nextInt();
-            if(temporada<=0)
+            duracao = console.nextInt();
+            console.nextLine();
+            if(duracao<=0)
                 System.out.println("A duracao deve ser um numero inteiro e positivo: ");
-        }while (temporada<=0);
+
+        }while (duracao<=0);
 
         System.out.print("\nConfirma a inclusão da episodio? (S/N) ");
         char resp = console.nextLine().charAt(0);
@@ -160,6 +176,100 @@ public class MenuEpisodios {
     }
 
     public void alterarEpisodio() {
+
+        System.out.println("\nAlteracao de episodio");
+        System.out.print("Digite o nome do episodio: ");
+        String nome = console.nextLine();
+        Episodio[] ea = null;
+    
+        try {
+
+            // Buscar todos os episódios com o nome
+            ea = arqEpisodios.readNome(nome);
+            if (ea != null && ea.length > 0) {
+                System.out.println("\nEpisodios encontrados com o nome '" + nome + "':");
+                for (int i = 0; i < ea.length; i++) {
+                    System.out.println("\n[" + (i + 1) + "] ");
+                    mostraEpisodio(ea[i]);
+                }
+    
+                System.out.printf("\nSelecione (1-%d) qual episodio deseja alterar: ", ea.length);
+                int opcao = console.nextInt();
+                console.nextLine(); // consumir quebra de linha
+    
+                if (opcao < 1 || opcao > ea.length) {
+                    System.out.println("Opção inválida.");
+                    return;
+                }
+    
+                Episodio episodio = ea[opcao - 1];
+                System.out.println("Episodio escolhido:");
+                mostraEpisodio(episodio);
+    
+                // Alterar nome
+                System.out.print("\nNovo nome (deixe em branco para manter o anterior): ");
+                String novoNome = console.nextLine();
+                if (!novoNome.isEmpty()) {
+                    episodio.setNome(novoNome);
+                }
+    
+                // Alterar temporada
+                System.out.print("Nova temporada (deixe em branco para manter a anterior): ");
+                String novaTemporada = console.nextLine();
+                if (!novaTemporada.isEmpty()) {
+                    try {
+                        episodio.setTemporada(Integer.parseInt(novaTemporada));
+                    } catch (NumberFormatException e) {
+                        System.err.println("Temporada inválida. Valor mantido.");
+                    }
+                }
+    
+                // Alterar duração
+                System.out.print("Nova duracao (deixe em branco para manter a anterior): ");
+                String novaDuracaoStr = console.nextLine();
+                if (!novaDuracaoStr.isEmpty()) {
+                    try {
+                        episodio.setDuracao(Integer.parseInt(novaDuracaoStr));
+                    } catch (NumberFormatException e) {
+                        System.err.println("Duracao inválida. Valor mantido.");
+                    }
+                }
+    
+                // Alterar data de lançamento
+                System.out.print("Nova data de lancamento (DD/MM/AAAA) (deixe em branco para manter a anterior): ");
+                String novaDataStr = console.nextLine();
+                if (!novaDataStr.isEmpty()) {
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        episodio.setLancamento(LocalDate.parse(novaDataStr, formatter));
+                    } catch (Exception e) {
+                        System.err.println("Data inválida. Valor mantido.");
+                    }
+                }
+    
+                // Confirmar alterações
+                System.out.print("\nConfirma as alterações? (S/N) ");
+                char resp = console.next().charAt(0);
+                if (resp == 'S' || resp == 's') {
+                    boolean alterado = arqEpisodios.update(episodio);
+                    if (alterado) {
+                        System.out.println("Episodio alterado com sucesso.");
+                    } else {
+                        System.out.println("Erro ao alterar o episodio.");
+                    }
+                } else {
+                    System.out.println("Alterações canceladas.");
+                }
+            } else {
+                System.out.println("Nenhum episódio encontrado com esse nome.");
+            }
+        } catch (Exception e) {
+            System.out.println("Erro do sistema. Não foi possível alterar o episodio!");
+            e.printStackTrace();
+        }
+    }
+
+    /*public void alterarEpisodio() {
 
         System.out.println("\nAlteração de episodio");
         System.out.print("Digite o nome do episodio: "); // Prompt the user for the episode name
@@ -244,10 +354,10 @@ public class MenuEpisodios {
             e.printStackTrace();
         }
         
-    }
+    }*/
 
 
-    public void excluirEpisodio() {
+    /*public void excluirEpisodio() {
         System.out.println("\nExclusão de episodio");
         System.out.print("Digite o nome do episodio: ");
         String nome = console.nextLine();
@@ -283,13 +393,75 @@ public class MenuEpisodios {
             System.out.println("Erro do sistema. Não foi possível excluir o episodio!");
             e.printStackTrace();
         }
+    }*/
+
+    public void excluirEpisodio() {
+        System.out.println("\nExclusão de episodio");
+        System.out.print("Digite o nome do episodio: ");
+        String nome = console.nextLine();
+        Episodio[] ea = null;
+    
+        try {
+
+            // Buscar todos os episódios com o nome
+            ea = arqEpisodios.readNome(nome);
+
+            if (ea != null && ea.length > 0) {
+
+                System.out.println("\nEpisódios encontrados com o nome '" + nome + "':");
+                for (int i = 0; i < ea.length; i++) {
+                    System.out.println("\n[" + (i + 1) + "] ");
+                    mostraEpisodio(ea[i]);  // Exibe detalhes de cada episódio encontrado
+                }
+    
+                System.out.printf("\nSelecione (1-%d) qual episódio deseja excluir: ", ea.length);
+                int opcao = console.nextInt();
+                console.nextLine(); // Consumir a quebra de linha
+    
+                if (opcao < 1 || opcao > ea.length) {
+                    System.out.println("Opção inválida.");
+                    return;
+                }
+    
+                Episodio episodio = ea[opcao - 1];
+                System.out.print("\nConfirma a exclusão do episodio? (S/N) ");
+                char resp = console.nextLine().charAt(0);
+    
+                if (resp == 'S' || resp == 's') {
+
+                    boolean excluido = arqEpisodios.delete(episodio.getID());
+                    if (excluido) {
+                        System.out.println("Episodio excluído com sucesso.");
+                    } else {
+                        System.out.println("Erro ao excluir o episodio.");
+                    }
+
+                } else {
+                    System.out.println("Exclusão cancelada.");
+                }
+
+            } else {
+                System.out.println("Nenhum episódio encontrado com esse nome.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro do sistema. Não foi possível excluir o episodio!");
+            e.printStackTrace();
+        }
     }
 
 
     public void mostraEpisodio(Episodio episodio) {
         if (episodio != null) {
-            System.out.println("\nDetalhes da Episodio:");
+            System.out.println("\nDetalhes do Episodio:");
             System.out.println("----------------------");
+            try {
+                //ler a serie de arqSeries usando o ID do episodio
+                Serie s = arqSeries.read(episodio.getIDSerie());
+                System.out.printf("Serie........: %s\n", (s != null ? s.getNome() : "Serie não encontrada"));
+            } catch (Exception e) {
+                System.out.println("Erro: nao foi possível buscar a serie do episodio.");
+            }
             System.out.printf("Nome.........: %s\n", episodio.getNome());
             System.out.printf("Temporada....: %d\n", episodio.getTemporada());
             System.out.printf("lancamento...: %s\n", episodio.getLancamento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));

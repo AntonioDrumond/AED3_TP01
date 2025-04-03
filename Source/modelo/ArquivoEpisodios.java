@@ -59,7 +59,6 @@ public class ArquivoEpisodios extends Arquivo<Episodio> {
       for(ParNomeId par : pares){
 
         episodios[i++] = read(par.getId());
-        i++;
 
       }
 
