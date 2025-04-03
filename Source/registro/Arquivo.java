@@ -206,8 +206,6 @@ public class Arquivo <T extends Registro>
 						arquivo.seek(PIE.getEndereco()+3); // Pular lapide e tamanho
 						arquivo.write(BA2);
 
-						//FALTOU SETAR TRUE
-						res = true;
 					}
 					else // Escreve o registro no final do arquivo
 					{
@@ -218,8 +216,8 @@ public class Arquivo <T extends Registro>
 						
 						writeObj(novoObj, true);
 
-						res = true;
 					}
+					res = true;
 				}
 			}
 		}
