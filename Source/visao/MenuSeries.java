@@ -435,9 +435,9 @@ public class MenuSeries
                 if (resp == 'S' || resp == 's') 
 				{
                     // Salva as alterações no arquivo
-                    System.out.println("Attempting to update the series...");
+                    //System.out.println("Attempting to update the series...");
                     boolean alterado = arqSeries.update(serie);
-                    System.out.println("Update completed.");
+                    //System.out.println("Update completed.");
 
                     if (alterado) 
 					{
@@ -526,78 +526,6 @@ public class MenuSeries
             e.printStackTrace();
         }
     }
-
-    /*public void excluirSerie() 
-	{
-        System.out.println("\nExclusão de serie");
-        String nome;
-        boolean nomeValido = false;
-
-        do 
-		{
-            System.out.print("\nNome (3 dígitos): ");
-            nome = console.nextLine();  // Lê o nome digitado pelo usuário
-
-            if (nome.isEmpty())
-			{
-                return; 
-			}
-
-            // Validação do nome
-            if (nome.length() > 2)
-			{
-                nomeValido = true;  // Nome válido
-            } 
-			else 
-			{
-                System.out.println("Nome inválido. O nome deve conter no mínimo 3 dígitos.");
-            }
-
-        } while (!nomeValido);
-
-        try 
-		{
-            // Tenta ler a serie com o nome fornecido
-            Serie[] s = arqSeries.readNome(nome);
-            Serie serie = s[0];
-			
-            if (serie != null) 
-			{
-                System.out.println("Serie encontrada:");
-                mostraSerie(serie);  // Exibe os dados do serie para confirmação
-
-                System.out.print("\nConfirma a exclusão do serie? (S/N) ");
-                char resp = console.next().charAt(0);  // Lê a resposta do usuário
-
-                if (resp == 'S' || resp == 's') 
-				{
-                    boolean excluido = arqSeries.delete(serie.getID());  // Chama o método de exclusão no arquivo
-
-                    if (excluido) 
-					{
-                        System.out.println("Serie excluído com sucesso.");
-                    }
-					else 
-					{
-                        System.out.println("Erro ao excluir o serie.");
-                    }
-                } 
-				else 
-				{
-                    System.out.println("Exclusão cancelada.");
-                }
-            } 
-			else 
-			{
-                System.out.println("Serie não encontrado.");
-            }
-        } 
-		catch (Exception e)
-		{
-            System.out.println("Erro do sistema. Não foi possível excluir o serie!");
-            e.printStackTrace();
-        }
-    }*/
 
     public void mostraSerie (Serie serie) 
 	{

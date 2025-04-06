@@ -63,21 +63,6 @@ public class Principal
 		{
             e.printStackTrace();
 
-        } finally {
-
-            // Ensure resources are closed
-            try {
-                if (arqSeries != null) {
-                    arqSeries.close();
-                }
-                if (arqEpisodios != null) {
-                    arqEpisodios.close();
-                }
-            } catch (Exception e) {
-                System.err.println("Erro ao fechar os arquivos.");
-                e.printStackTrace();
-            }
-
         }
     }
 

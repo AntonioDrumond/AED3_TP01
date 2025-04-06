@@ -1,5 +1,5 @@
 package entidades;
-import registro.Registro;
+import registro.EntidadeArquivo;
 
 import java.time.LocalDate;
 import java.io.ByteArrayOutputStream;
@@ -9,7 +9,7 @@ import java.io.DataInputStream;
 
 //falta metodos set e get
 
-public class Episodio implements Registro 
+public class Episodio implements EntidadeArquivo 
 {
 	// Atributos
 

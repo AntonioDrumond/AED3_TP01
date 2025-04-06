@@ -65,30 +65,6 @@ public class MenuEpisodios {
         } while (opcao != 0);
     }
 
-    /*public void buscarEpisodio() {
-
-        System.out.println("\nBusca de episodio");
-        System.out.print("Digite o nome do episodio: "); 
-        String nome = console.nextLine(); 
-
-        try {
-
-            Episodio[] episodios = arqEpisodios.readNome(nome);
-
-            if (episodios != null || episodios.length > 0) {
-                for (Episodio episodio : episodios) {
-                    mostraEpisodio(episodio);
-                }
-
-            } else {
-                System.out.println("Episodio não encontrado.");
-            }
-
-        } catch (Exception e) {
-            System.out.println("Erro do sistema. Não foi possível buscar o episodio!");
-            e.printStackTrace();
-        }
-    }*/
 
     public void buscarEpisodio() {
 
@@ -308,6 +284,7 @@ public class MenuEpisodios {
     }
 
     public void excluirEpisodio() {
+
         System.out.println("\nExclusão de episodio");
         System.out.print("Digite o nome do episodio: ");
         String nome = console.nextLine();

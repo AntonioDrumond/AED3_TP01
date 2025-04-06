@@ -5,9 +5,9 @@ import java.io.DataOutputStream;
 import java.io.DataInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
-import registro.Registro;
+import registro.EntidadeArquivo;
 
-public class Serie implements Registro 
+public class Serie implements EntidadeArquivo 
 {
 	// Atributos
     private int ID;
