@@ -21,11 +21,11 @@ Foi extremamente produtivo poder reutilizar várias funcionalidades de classes g
 
 Um quesito interessante é que o desenvolvimento deste programa complementou muito bem o conteúdo que estamos vendo na disciplina "Banco de Dados". Enquanto em BD trabalhamos com SQL, uma linguagem de consulta de alto nível, em AED3 pudemos ver "o que há por baixo", isto é, todo o trabalho interno feito para um CRUD ser bem sucedido. Ademais, todos os integrantes acreditam que o trabalho prático concretizou com muita clareza a teoria que vimos em sala.
 
-### Problemas
+### Desafios
 
 Como mencionado anteriormente, o primeiro desafio foi o choque inicial com a quantidade de classes e linhas de código, mas que foi rapidamente superado. Ademais, por ser nossa primeira vez utilizando algorimos de Tabela Hash Extensível[^3] e Árvore B+ [^4], tivemos alguns problemas entendendo e lidando com seus métodos, além de dificuldades na manipulação dos dados dentro/por meio dessas estruturas. Especialmente na Árvore B+, cuja explicação ainda não vimos em sala, o armazenamento de índices ainda é um pouco "misterioso" para nós. 
 
-Além disso, instruções de update foram um desafio para implementação e funcionamento, já que tivemos dúvidas a respeito de como funcionaria a alteração de nomes de séries sem prejudicar a integridade referencial, pois depreendemos que o relacionamento série-episódio fosse obrigatório para o lado do episódio. Para resolver essa questão, impedimos que uma série fosse deletada ou tivesse seu nome alterado se existissem episódios linkados a ela. Para maior praticidade do usuário, adicionamos então a funcionalidade no menu "Episódios" de excluir de uma só vez episódios de uma determinada série.
+Além disso, instruções de update foram um desafio para implementação e funcionamento, já que tivemos dúvidas a respeito de como funcionaria a alteração de nomes de séries sem prejudicar a integridade referencial, pois depreendemos que o relacionamento série-episódio fosse obrigatório para o lado do episódio. Para resolver essa questão, impedimos que uma série fosse deletada ou tivesse seu nome alterado se existissem episódios linkados a ela. Para maior praticidade do usuário, adicionamos então a funcionalidade no menu "Episódios" de excluir de uma só vez todos os episódios de uma determinada série.
 
 Durante a testagem, também decidimos impedir o cadastro de séries de nomes iguais, porém não de episódios de nomes iguais para séries diferentes. Se, ao buscar um nome de episódio, existir mais de um episódio com o mesmo nome, são listados todos os resultados correspondentes - no momento em que o usuário quer editar ou deletar, é dada a opção de escolher a qual série pertence o episódio ao qual ele se refere.
 
@@ -206,7 +206,7 @@ Exibe um menu para gerenciar séries e processa a entrada do usuário para execu
 
 ### Operações
 
-Todas as operações foram implementadas, sendo a mais desafiadora a UPDATE, já que é mais complexa no acesso aos dados de cada entidade e por utulizar diferentes métodos de criação de remoção para que o método em si funcione.
+Todas as operações foram implementadas, sendo a mais desafiadora a UPDATE, já que envolve a alteração de índices indiretos e por utilizar diferentes métodos de criação e de remoção de registros para que o método em si funcione.
 
 ## Checklist
 
