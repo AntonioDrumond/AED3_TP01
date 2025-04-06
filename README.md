@@ -27,7 +27,7 @@ Como mencionado anteriormente, o primeiro desafio foi o choque inicial com a qua
 
 Além disso, instruções de update foram um desafio para implementação e funcionamento, já que tivemos dúvidas a respeito de como funcionaria a alteração de nomes de séries sem prejudicar a integridade referencial, pois depreendemos que o relacionamento série-episódio fosse obrigatório para o lado do episódio. Para resolver essa questão, impedimos que uma série fosse deletada ou tivesse seu nome alterado se existissem episódios linkados a ela. Para maior praticidade do usuário, adicionamos então a funcionalidade no menu "Episódios" de excluir de uma só vez todos os episódios de uma determinada série.
 
-Durante a testagem, também decidimos impedir o cadastro de séries de nomes iguais, porém não de episódios de nomes iguais para séries diferentes. Se, ao buscar um nome de episódio, existir mais de um episódio com o mesmo nome, são listados todos os resultados correspondentes - no momento em que o usuário quer editar ou deletar, é dada a opção de escolher a qual série pertence o episódio ao qual ele se refere.
+Durante a testagem, também decidimos impedir o cadastro de séries de nomes iguais, porém não de episódios de nomes iguais. Se, ao buscar um nome de episódio, existir mais de um episódio com o mesmo nome, são listados todos os resultados correspondentes - no momento em que o usuário quer editar ou deletar, são mostradas as descrições de todos os episódios recuperados com o nome fornecido e é possível escolher a qual opção ele se refere.
 
 ### Resultados
 
