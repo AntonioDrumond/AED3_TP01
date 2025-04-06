@@ -387,8 +387,17 @@ public class MenuSeries
                     System.out.print("\nNovo nome (deixe em branco para manter o anterior): ");
                     String novoNome = console.nextLine();
 
+                    //NOVO PASSO: Checar se o novo nome já está registrado
                     if (!novoNome.isEmpty()) 
-				    {
+                    {
+                        // Verificar se o novo nome já está registrado
+                        Serie[] seriesComMesmoNome = arqSeries.readNome(novoNome);
+                        if (seriesComMesmoNome != null && seriesComMesmoNome.length > 0) 
+                        {
+                            System.out.println("Erro: Já existe uma série registrada com este nome.");
+                            return;
+                        }
+
                         serie.setNome(novoNome);  // Atualiza o nome se fornecido
                     }
                 }
