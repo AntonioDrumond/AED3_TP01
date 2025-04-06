@@ -9,9 +9,29 @@
 
 ## Intrudução
 
-Neste trabalho prático, o objetivo foi desenvolver um sistema CRUD (Criar, Ler, Atualizar, Excluir)[^1] para gerenciar séries e episódios de plataformas de streaming, como Netflix, Prime, entre outras. Para isso, a estrutura de dados foi organizada com duas entidades principais: Série (que inclui atributos como nome, ano de lançamento, sinopse e plataforma de streaming) e Episódio (com dados como nome, temporada, data de lançamento e duração). O relacionamento entre as séries e episódios foi modelado como um relacionamento de 1:N, ou seja, uma série pode ter vários episódios, e cada episódio pertence a uma única série. O sistema implementa as operações de inclusão, busca, alteração e exclusão para ambas as entidades, utilizando a Tabela Hash Extensível e a Árvore B+ como índices para otimizar o gerenciamento e a consulta dos dados.
+Neste trabalho prático, o objetivo foi desenvolver um sistema CRUD (Criar, Ler, Atualizar, Excluir)[^1] para gerenciar séries e episódios de plataformas de streaming, como Netflix, Prime, entre outras. Para isso, a estrutura de dados foi organizada com duas entidades principais: Série (que inclui atributos como nome, ano de lançamento, sinopse e plataforma de streaming) e Episódio (com dados como nome, temporada, data de lançamento e duração). O relacionamento entre as séries e episódios foi modelado como um relacionamento de 1:N, ou seja, uma série pode ter vários episódios, enquanto cada episódio pertence a uma única série. O sistema implementa as operações de inclusão, busca, alteração e exclusão para ambas as entidades, utilizando a Tabela Hash Extensível e a Árvore B+ como índices para otimizar o gerenciamento e a consulta dos dados.
 
-O desenvolvimento seguiu o padrão MVC (Modelo, Visão, Controle)[^2], o que garantiu que a lógica de controle das operações de séries e episódios fosse separada da interface com o usuário. A interface inicial foi projetada para permitir que o usuário escolhesse entre diferentes opções de gerenciamento, como séries e episódios. A visão de cada entidade foi estruturada para apresentar os dados de forma clara, facilitando a consulta e a manipulação dos registros. Além disso, foi implementada uma verificação que impede a exclusão de uma série caso haja episódios vinculados a ela, assegurando a integridade dos dados. 
+O desenvolvimento seguiu o padrão MVC (Modelo, Visão, Controle)[^2], o que garantiu que a lógica de controle das operações de séries e episódios fosse separada da interface com o usuário. A interface inicial foi projetada para permitir que o usuário escolhesse entre diferentes opções de gerenciamento, como séries e episódios. A visão de cada entidade foi estruturada para apresentar os dados de forma clara, facilitando a consulta e a manipulação dos registros. Além disso, foi implementada uma verificação que impede a exclusão de uma série, ou a alteração de seu nome, caso haja episódios vinculados a ela, assegurando a integridade referencial dos dados. 
+
+## Experiência
+
+Foi nosso primeiro contato com a manipulação de um programa tão grande, composto de várias classes, que vão de mais genéricas a mais específicas. Apesar de a quantidade de arquivos de código ter nos assustado no início, ao longo do desenvolvimento ficou evidente porque encapsular funcionalidades, planejar interfaces, criar classes genéricas e utilizar cláusulas de "extends" e "includes" são consideradas boas práticas de programação. O grupo também percebeu as vantagens da orientação a objetos em Java para produção em escala comparado a linguagens puramente procedimentais, onde o foco é apenas em funções, como C.
+
+Foi extremamente produtivo poder reutilizar várias funcionalidades de classes genéricas para entidades específicas. A separação de "níveis" de funcionalidade também permitiu debugar com mais facilidade, pois apenas algumas classes tinham acesso ao arquivo, enquanto apenas algumas outras lidavam com input do usuário, enquanto outras só guardavam as informações e funções mais relevantes para uma entidade, etc. Ademais, os códigos do Menu e Principal ficaram bem mais sucintos ao utilizar recursos de diversas classes pré-elaboradas. Outro ponto é que quando precisávamos "dar uma olhada" rapidamente no que uma classe fazia em sua essência, sempre recorríamos às interfaces. 
+
+Um quesito interessante é que o desenvolvimento deste programa complementou muito bem o conteúdo que estamos vendo na disciplina "Banco de Dados". Enquanto em BD trabalhamos com SQL, uma linguagem de consulta de alto nível, em AED3 pudemos ver "o que há por baixo", isto é, todo o trabalho interno feito para um CRUD ser bem sucedido. Ademais, todos os integrantes acreditam que o trabalho prático concretizou com muita clareza a teoria que vimos em sala.
+
+### Problemas
+
+Como mencionado anteriormente, o primeiro desafio foi o choque inicial com a quantidade de classes e linhas de código, mas que foi rapidamente superado. Ademais, por ser nossa primeira vez utilizando algorimos de Tabela Hash Extensível[^3] e Árvore B+ [^4], tivemos alguns problemas entendendo e lidando com seus métodos, além de dificuldades na manipulação dos dados dentro/por meio dessas estruturas. Especialmente na Árvore B+, cuja explicação ainda não vimos em sala, o armazenamento de índices ainda é um pouco "misterioso" para nós. 
+
+Além disso, instruções de update foram um desafio para implementação e funcionamento, já que tivemos dúvidas a respeito de como funcionaria a alteração de nomes de séries sem prejudicar a integridade referencial, pois depreendemos que o relacionamento série-episódio fosse obrigatório para o lado do episódio. Para resolver essa questão, impedimos que uma série fosse deletada ou tivesse seu nome alterado se existissem episódios linkados a ela. Para maior praticidade do usuário, adicionamos então a funcionalidade no menu "Episódios" de excluir de uma só vez episódios de uma determinada série.
+
+Durante a testagem, também decidimos impedir o cadastro de séries de nomes iguais, porém não de episódios de nomes iguais para séries diferentes. Se, ao buscar um nome de episódio, existir mais de um episódio com o mesmo nome, são listados todos os resultados correspondentes - no momento em que o usuário quer editar ou deletar, é dada a opção de escolher a qual série pertence o episódio ao qual ele se refere.
+
+### Resultados
+
+Com grande esforço, conseguimos realizar tudo que o problema pedia. Criamos, portanto, uma interface semelhante "streaming-like" onde temos os dados e metadados das séries e episódios cadastrados. Toda nova entidade cadastrada é passível de ser buscada, atualizada e excluída com facilidade. Adicionamos também funcionalidades para listar todos os episódios de uma série, listar todas as séries cadastradas e excluir todos os episódios de uma série. Por demais, lidadmos confrontos que poderiam dar problemas futuros na interação usuário-método, como por exemplo, nomes de episódios repetidos.
 
 ## Código
 
@@ -184,16 +204,6 @@ Inicializa a classe `MenuSeries` configurando as estruturas de arquivos necessá
 
 Exibe um menu para gerenciar séries e processa a entrada do usuário para executar as ações correspondentes.
 
-## Experiência
-
-### Problemas
-
-Por ser nossa primeira vez utilizando algorimos de Tabela Hash Extensível[^3] e Árvore B+ [^4], tivemos alguns problemas entendendo e lidando com seus métodos, além de dificuldades na manipulação dos dados dentro/por meio dessas estruturas. Além disso, instruções de update foram um desafio para implementação e funcionamento, já que tivemos dúvidas a cerca de como funcionaria para substituição de nomes de séries, além dos indíces de ID's para cada entidade.
-
-### Resultados
-
-Apesar do grande esforço, conseguimos realizar tudo que o problema pedia, criando portanto, uma interface semelhante a de straming onde temos os dados e metadados das séries e episódios cadastrados. Toda nova entidade cadastrada é passível de ser buscada, atualizada e excluída com facilidade. Por demais, lidadmos com problemas de confrontos que poderiam dar problemas futuros na interação usuário-método, como por exemplo, nomes de episódios repetidos.
-
 ### Operações
 
 Todas as operações foram implementadas, sendo a mais desafiadora a UPDATE, já que é mais complexa no acesso aos dados de cada entidade e por utulizar diferentes métodos de criação de remoção para que o método em si funcione.
@@ -211,8 +221,6 @@ Todas as operações foram implementadas, sendo a mais desafiadora a UPDATE, já
 - [x] O trabalho está funcionando corretamente? **SIM**
 - [x] O trabalho está completo? **SIM**
 - [x] O trabalho é original e não a cópia de um trabalho de outro grupo? **SIM**
-
-
 
 
 [^1]: https://www.codecademy.com/article/what-is-crud
